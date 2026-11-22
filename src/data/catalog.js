@@ -42,7 +42,7 @@ export const CATALOG = {
     title: "8 Quart Stockpot",
     note: "Doesn't Have To Be All-Clad",
     link: 'https://www.amazon.com/Cuisinart-766-24-Classic-8-Quart-Stockpot/dp/B00008CM6J',
-    image: 'https://m.media-amazon.com/images/I/41k0lr7vnAL._AC_SL1000_.jpg',
+    image: "https://images.pexels.com/photos/18789103/pexels-photo-18789103.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   'Sticky rollers --- purple set with all 3': {
     title: "Get Ur Sticky Purple Roller Set",
@@ -53,7 +53,7 @@ export const CATALOG = {
   Showerhead: {
     title: "Showerhead",
     link: 'https://www.amazon.com/AquaCare-Pressure-Spray-Filtered-Showerhead/dp/B0FJBDGC9Z',
-    image: 'https://m.media-amazon.com/images/I/81Voxy0TN6L._AC_SL1500_.jpg',
+    image: "https://images.pexels.com/photos/4194866/pexels-photo-4194866.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   'Mangosteen fruit': {
     title: 'Fresh Mangosteen',
@@ -65,18 +65,17 @@ export const CATALOG = {
   'Chargeable hand warmers': {
     title: "Rechargeable Hand Warmers",
     link: 'https://www.amazon.com/dp/B0BG5T55F5',
-    image: 'https://m.media-amazon.com/images/I/71H3b5pgQCL._AC_SL1500_.jpg',
   },
   'Floral long lasting perfume': {
     title: "Floral Long-Lasting Perfume",
     note: 'Expensive, Long-Lasting Floral',
     link: 'https://www.amazon.com/dp/B009S3UP3W',
-    image: 'https://m.media-amazon.com/images/I/71vP8VO6fvL._AC_SL1500_.jpg',
+    image: "https://images.pexels.com/photos/4735929/pexels-photo-4735929.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   'Portable battery': {
     title: "Portable Battery",
     link: 'https://www.anker.com/products/a1289',
-    image: 'https://cdn.shopify.com/s/files/1/0493/9834/9974/products/A1289011-Anker_737_Power_Bank_PowerCore_24K_1.png?v=1775967275',
+    image: "https://images.pexels.com/photos/3921704/pexels-photo-3921704.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   'Samsung tablet': {
     title: "Samsung Tablet",
@@ -97,12 +96,12 @@ export const CATALOG = {
   'Package of prosciutto': {
     title: "Package Of Prosciutto",
     link: 'https://www.amazon.com/dp/B0G8LRGLGN',
-    image: 'https://m.media-amazon.com/images/I/716unEbKMNL._SL1500_.jpg',
+    image: "https://images.pexels.com/photos/20095427/pexels-photo-20095427.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   'Chef paring knife': {
     title: "Chef Paring Knife",
     link: 'https://www.victorinox.com/en-US/Products/Cutlery/Paring-Knives/Swiss-Classic-Paring-Knife/p/6.7603',
-    image: 'https://imageengine.victorinox.com/transform/c5cabef9-1c03-4d73-aadf-694a23b0bed9/CUT_6-7603_S1',
+    image: "https://images.pexels.com/photos/26926847/pexels-photo-26926847.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   '2 hours of individual personal time with me': {
     title: '2 Hours Of Individual Personal Time',
@@ -114,7 +113,7 @@ export const CATALOG = {
     title: "Turkish Delight",
     note: "Not Nutty",
     link: "https://www.turkishtaste.com/products/turkish-delight-with-rose-and-lemon-flavored",
-    image: "https://cdn.shopify.com/s/files/1/0259/9003/7582/products/tt-haci-bekir-lemon-rose-3.jpg?v=1605788047",
+    image: "https://images.pexels.com/photos/7393908/pexels-photo-7393908.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   "Apple iPad": {
     title: "Apple iPad",
@@ -124,12 +123,12 @@ export const CATALOG = {
   "Gem bedazzling kit": {
     title: "Gem Bedazzling Kit",
     link: "https://www.michaels.com/product/crystal-hotfix-tool-set-by-bead-landing-10682692",
-    image: "https://imgs.michaels.com/c40f7ef5-d79c-41c5-ba2f-2291a0bd5cc9.jpg?fit=inside%7C540:540",
+    image: "https://images.unsplash.com/photo-1648942754609-2d5593c5e23e?auto=format&fit=crop&w=1200&q=80",
   },
   "Tooth gems": {
     title: "Tooth Gem Kit",
-    link: "https://gemzeez.com/products/gemzeez-2-0-starter-kit-family-pack",
-    image: "https://cdn.shopify.com/s/files/1/0385/7996/1900/files/IMG-4570.png?v=1793074002",
+    link: "https://commons.wikimedia.org/wiki/File:Tandsmyckning.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tandsmyckning.jpg",
   },
   "Kendra Scott earrings --- opal please": {
     title: "Kendra Scott Earrings",
@@ -155,7 +154,7 @@ export const CATALOG = {
   "Crystal candy": {
     title: "Crystal Rock Candy",
     link: "https://www.dylanscandybar.com/products/two-tone-rock-candy-anniversary-set",
-    image: "https://cdn.shopify.com/s/files/1/0150/8992/6198/files/20211215-By-Asha-Fuller-DCB-0007-Z.jpg?v=1706816016",
+    image: "https://images.unsplash.com/photo-1575650771982-097ad8b4a716?auto=format&fit=crop&w=1200&q=80",
   },
   "Glow Recipe full kit": {
     title: "Glow Recipe Full Kit",
@@ -182,12 +181,11 @@ export const CATALOG = {
   "Teeth whitening strips": {
     title: "Teeth Whitening Strips",
     link: "https://www.hismileteeth.com/products/whitening-strips",
-    image: "https://cdn.shopify.com/s/files/1/0916/4078/files/01-Strips-ProductPage.png?v=1691535894",
   },
   "Good razors": {
     title: "Razors",
     link: "https://shopflamingo.com/products/original-razor-starter-set",
-    image: "https://cdn.shopify.com/s/files/1/0558/7481/4054/files/2026_Allure_Starter_set_lilac.jpg?v=1790097165",
+    image: "https://images.pexels.com/photos/4404978/pexels-photo-4404978.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   "Sugar cane": {
     title: "Sugar Cane",
@@ -232,7 +230,7 @@ export const CATALOG = {
   "Shoulder shrug": {
     title: "Shoulder Shrug",
     link: "https://www.target.com/p/women-s-lightweight-shrug-sweater-for-dresses-tops-long-sleeve-open-front-knit-crop-bolero-cardigan/-/A-1002725592",
-    image: "https://target.scene7.com/is/image/Target/GUEST_078664ba-8dd9-40d1-8a92-605ef533e8d5",
+    image: "https://images.pexels.com/photos/21575896/pexels-photo-21575896.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   "Fake French tip nails": {
     title: "Fake French Tip Nails",
@@ -254,7 +252,6 @@ export const CATALOG = {
   "Yoga wrap top": {
     title: "Yoga Wrap Top",
     link: "https://athleta.gap.com/browse/product.do?pid=8455740820002",
-    image: "https://athleta.gap.com/webcontent/0063/010/601/cn63010601.jpg",
   },
 
   // --------------------------------------------------- Alyson, part 2 ----

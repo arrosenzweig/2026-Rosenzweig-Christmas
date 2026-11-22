@@ -1,12 +1,15 @@
-/** Someone's profile picture --- their upload if they have one, their emoji if not. */
+/**
+ * Someone's profile picture --- their upload if they have one, their emoji if
+ * not. The size comes in as a CSS variable so a phone-sized screen can shrink
+ * it from the stylesheet.
+ */
 export default function Avatar({ profile, image, size = 96, className = '' }) {
   return (
     <span
       className={`avatar ${className}`}
       style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.46,
+        '--avatar': `${size}px`,
+        '--avatar-font': `${Math.round(size * 0.46)}px`,
         '--accent': profile.theme.accent,
         '--accent-2': profile.theme.accent2,
       }}

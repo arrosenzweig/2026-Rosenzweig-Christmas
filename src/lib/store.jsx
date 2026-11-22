@@ -313,6 +313,21 @@ export function StoreProvider({ children }) {
     });
   }, [push]);
 
+  /** Wave away the "this gift changed" warning on one gift. */
+  const acknowledgeChange = useCallback((itemId) => {
+    const ackAt = Date.now();
+    setState((s) => {
+      const claim = s.claims[itemId];
+      if (!claim) return s;
+      return { ...s, claims: { ...s.claims, [itemId]: { ...claim, ackAt } } };
+    });
+    push((b) => {
+      const claim = b.claims[itemId];
+      if (!claim) return b;
+      return { ...b, claims: { ...b.claims, [itemId]: { ...claim, ackAt } } };
+    });
+  }, [push]);
+
   const resetEverything = useCallback(() => setState(buildSeed()), []);
 
   const value = useMemo(
@@ -329,12 +344,13 @@ export function StoreProvider({ children }) {
       updateItem,
       deleteItem,
       setClaim,
+      acknowledgeChange,
       setProfileImage,
       addNote,
       deleteNote,
       resetEverything,
     }),
-    [state, profileId, status, push, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
+    [state, profileId, status, push, acknowledgeChange, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
@@ -362,6 +378,16 @@ export function sortItems(items, sort) {
   return copy.sort(
     (a, b) => (RANK[b.priority] || 0) - (RANK[a.priority] || 0) || b.createdAt - a.createdAt,
   );
+}
+
+/**
+ * Has the owner changed this gift since you said you were buying it?
+ * `ackAt` on your claim is how you wave the warning away.
+ */
+export function changedSinceClaim(item, claim) {
+  if (!item || !claim || !item.lastEditedAt) return false;
+  const seen = Math.max(claim.at || 0, claim.ackAt || 0);
+  return item.lastEditedAt > seen;
 }
 
 export function msLeft(claim, now = Date.now()) {

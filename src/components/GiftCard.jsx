@@ -71,13 +71,18 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
         {editable && (
           <>
             <button className="photo-edit" type="button" onClick={() => photoRef.current?.click()} title="Click to change the photo">
-              🖼️ Change photo
+              🖼️ <span className="photo-edit-label">Change photo</span>
             </button>
             <input ref={photoRef} type="file" accept="image/*" hidden onChange={onPickPhoto} />
           </>
         )}
 
-        {showCredit && <span className="ai-credit">Warning! Default image by AI agent</span>}
+        {showCredit && (
+          <span className="ai-credit" aria-label="Warning: default image by AI agent">
+            <span className="ai-credit-lead">Warning!</span>
+            <span>Default image by AI agent</span>
+          </span>
+        )}
 
         {candyCane && <div className="candy-cane-watermark" aria-hidden="true" />}
         {hidden && (

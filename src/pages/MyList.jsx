@@ -137,12 +137,16 @@ export default function MyList() {
               onPriority={(id, priority) => updateItem(id, { priority })}
               // rewriting the gift makes it yours, so the catalog stops updating it ---
               // but merely approving the photo is not a rewrite
-              onEdit={(id, patch) =>
+              onEdit={(id, patch) => {
+                const content = ['title', 'notes', 'link', 'image'].filter((f) => f in patch);
                 updateItem(id, {
                   ...patch,
-                  ...(['title', 'notes', 'link', 'image'].some((f) => f in patch) ? { edited: true } : {}),
-                })
-              }
+                  // changing the gift itself warns anyone already buying it
+                  ...(content.length
+                    ? { edited: true, lastEditedAt: Date.now(), lastEditedFields: content }
+                    : {}),
+                });
+              }}
             />
           ))}
         </div>

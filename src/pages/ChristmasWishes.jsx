@@ -4,10 +4,11 @@ import GiftCard from '../components/GiftCard.jsx';
 import ProfileNotes from '../components/ProfileNotes.jsx';
 import SortBar from '../components/SortBar.jsx';
 import { PROFILES, themeVars } from '../data/profiles.js';
-import { sortItems, useStore } from '../lib/store.jsx';
+import ChangeWarning from '../components/ChangeWarning.jsx';
+import { changedSinceClaim, sortItems, useStore } from '../lib/store.jsx';
 
 export default function ChristmasWishes() {
-  const { items, claims, profileId, setClaim, profileMeta } = useStore();
+  const { items, claims, profileId, setClaim, profileMeta, acknowledgeChange } = useStore();
   const others = PROFILES.filter((p) => p.id !== profileId);
   const [selected, setSelected] = useState(null);
   const [sort, setSort] = useState('priority');
@@ -24,6 +25,11 @@ export default function ChristmasWishes() {
       rest: sortItems(theirs.filter((i) => !isMine(i)), sort),
     };
   }, [who, items, claims, profileId, sort]);
+
+  // gifts of theirs you are buying that they have since changed
+  const changedEntries = giving
+    .filter((item) => changedSinceClaim(item, claims[item.id]))
+    .map((item) => ({ item, fields: item.lastEditedFields || [] }));
 
   const card = (item) => (
     <GiftCard
@@ -76,6 +82,8 @@ export default function ChristmasWishes() {
               )}
             </div>
           </header>
+
+          <ChangeWarning entries={changedEntries} onAck={acknowledgeChange} />
 
           {giving.length > 0 && (
             <div className="list-block">

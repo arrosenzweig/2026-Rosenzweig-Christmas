@@ -1,18 +1,20 @@
 import { useMemo } from 'react';
+import ChangeWarning from '../components/ChangeWarning.jsx';
 import { profileById } from '../data/profiles.js';
-import { formatLeft, msLeft, PENDING_DAYS, useStore } from '../lib/store.jsx';
+import { changedSinceClaim, formatLeft, msLeft, PENDING_DAYS, useStore } from '../lib/store.jsx';
 
-function Row({ item, claim, onClaim }) {
+function Row({ item, claim, onClaim, changed }) {
   const owner = profileById(item.owner);
   const left = claim.status === 'pending' ? msLeft(claim) : null;
   const urgent = left !== null && left < 24 * 3600 * 1000;
 
   return (
-    <article className={`shop-row ${urgent ? 'urgent' : ''}`}>
+    <article className={`shop-row ${urgent ? 'urgent' : ''} ${changed ? 'changed' : ''}`}>
       <img className="shop-thumb" src={item.image} alt="" loading="lazy" />
       <div className="shop-main">
         <a className="gift-title" href={item.link} target="_blank" rel="noreferrer noopener">{item.title}</a>
         <span className="shop-for">for {owner?.emoji} {owner?.name}</span>
+        {changed && <span className="changed-flag">⚠️ {owner?.name} changed this gift</span>}
         {item.notes && <span className="gift-notes">{item.notes}</span>}
       </div>
 
@@ -40,7 +42,7 @@ function Row({ item, claim, onClaim }) {
 }
 
 export default function SantasWorkshop() {
-  const { items, claims, profileId, setClaim } = useStore();
+  const { items, claims, profileId, setClaim, acknowledgeChange } = useStore();
 
   const { pending, bought } = useMemo(() => {
     const byId = Object.fromEntries(items.map((i) => [i.id, i]));
@@ -56,10 +58,18 @@ export default function SantasWorkshop() {
 
   const claim = (id, status) => setClaim(id, status, profileId);
 
+  // gifts the owner has changed since you took them on
+  const changedEntries = [...pending, ...bought]
+    .filter(({ item, claim: c }) => changedSinceClaim(item, c))
+    .map(({ item }) => ({ item, fields: item.lastEditedFields || [] }));
+  const hasChanged = (id) => changedEntries.some((e) => e.item.id === id);
+
   return (
     <section>
       <h2 className="page-title">Santa&apos;s Workshop</h2>
       <p className="page-sub">Everything you have on hold and everything you have already bought.</p>
+
+      <ChangeWarning entries={changedEntries} onAck={acknowledgeChange} />
 
       <h3 className="shop-heading">🍬 Pending purchase <small>{pending.length}</small></h3>
       <p className="shop-note">A hold lasts {PENDING_DAYS} days. If you don&apos;t mark it bought, it goes back on everyone else&apos;s board.</p>
@@ -67,7 +77,9 @@ export default function SantasWorkshop() {
         <p className="empty small">Nothing on hold right now.</p>
       ) : (
         <div className="shop-list">
-          {pending.map(({ item, claim: c }) => <Row key={item.id} item={item} claim={c} onClaim={claim} />)}
+          {pending.map(({ item, claim: c }) => (
+            <Row key={item.id} item={item} claim={c} onClaim={claim} changed={hasChanged(item.id)} />
+          ))}
         </div>
       )}
 
@@ -76,7 +88,9 @@ export default function SantasWorkshop() {
         <p className="empty small">No gifts bought yet.</p>
       ) : (
         <div className="shop-list">
-          {bought.map(({ item, claim: c }) => <Row key={item.id} item={item} claim={c} onClaim={claim} />)}
+          {bought.map(({ item, claim: c }) => (
+            <Row key={item.id} item={item} claim={c} onClaim={claim} changed={hasChanged(item.id)} />
+          ))}
         </div>
       )}
     </section>
