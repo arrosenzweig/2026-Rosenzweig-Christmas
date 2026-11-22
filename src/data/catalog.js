@@ -241,6 +241,7 @@ export const CATALOG = {
   "Phone wallet": {
     title: "Phone Wallet",
     link: "https://www.target.com/p/popsockets-magnetic-phone-wallet-with-grip-and-magsafe-magnetic-adapter-ring-included/-/A-83446887",
+    image: "https://images.unsplash.com/photo-1753802865383-3d4909bfbec3?fm=jpg&q=80&w=900&auto=format&fit=crop",
   },
   "Cheap pilates socks": {
     title: "Pilates Socks",
@@ -251,6 +252,7 @@ export const CATALOG = {
   "Yoga wrap top": {
     title: "Yoga Wrap Top",
     link: "https://athleta.gap.com/browse/product.do?pid=8455740820002",
+    image: "https://images.unsplash.com/photo-1627547610879-ce5956f91721?fm=jpg&q=80&w=900&auto=format&fit=crop",
   },
 
   // --------------------------------------------------- Alyson, part 2 ----
