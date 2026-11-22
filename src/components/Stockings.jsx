@@ -31,7 +31,10 @@ export default function Stockings({ value = 'med', onChange, size = 'md' }) {
           </button>
         );
       })}
-      <span className="priority-label">{LEVELS.find((l) => l.id === value)?.label}</span>
+      <span className="priority-label">
+        <strong>{LEVELS.find((l) => l.id === value)?.label}</strong>
+        <small>Priority</small>
+      </span>
     </div>
   );
 }

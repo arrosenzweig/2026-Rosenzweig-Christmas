@@ -96,35 +96,41 @@ at the top of `src/styles.css`.
 
 ## Where the data lives
 
-Everything anyone adds, edits, claims or deletes is written to a **Firebase
-Realtime Database** over its plain REST API as it happens, and every open tab
-picks up everyone else's changes within about five seconds. The data lives in
-the database, not in the site, so the site can be rebuilt and redeployed as
-often as you like without touching anybody's list. `localStorage` is only a
-cache, so a tab paints instantly and keeps working if the network blips.
+There is **one shared board**, and it is already running --- nobody has to sign
+up, log in, or set anything up. Open the site and you are on it.
 
-### Turning the shared board on (one time, about two minutes)
+Everything anyone adds, edits, claims or deletes is written to that board the
+moment it happens, and every open tab re-reads it every five seconds, so a gift
+Alyla adds on her phone turns up on Mom's laptop by itself. The board lives on a
+server, not inside the site, so the site can be rebuilt and redeployed as often
+as you like without touching a single list. `localStorage` is only a cache, so a
+tab paints instantly and keeps working if the network blips.
 
-1. [console.firebase.google.com](https://console.firebase.google.com) → **Add
-   project** (any name, Analytics off).
-2. **Build → Realtime Database → Create Database → Start in test mode.**
-3. Copy the database URL it shows you, e.g.
-   `https://rosenzweig-christmas-default-rtdb.firebaseio.com`
-4. Paste it as `FIREBASE_DB` at the top of [`src/lib/remote.js`](src/lib/remote.js)
-   (or set `VITE_FIREBASE_DB` at build time) and push.
+It is hosted on [textdb.dev](https://textdb.dev) --- a free plain-text store
+that needs no account and no API key --- under one long random key
+(`src/lib/remote.js`). That key is what keeps the board private: it is not
+guessable, but anyone who had it could read or write the board, so treat it like
+a door key rather than a password. Nothing in the lists is secret from the
+family anyway --- the point of the site is that everyone reads everyone else's.
 
-Nobody else needs an account or a login — opening the site is enough. Test mode
-leaves the database open to anyone who knows the URL, which is the trade for
-that; Firebase emails before test mode expires, and the simplest fix is to open
-**Rules** and set `.read` and `.write` to `true`.
+Writes are read-modify-write and queued one at a time, so two people changing
+different gifts in the same minute do not overwrite each other. A blank or
+failed read never wipes a board that is known to have things on it.
 
-The footer always says which mode you are in: *Shared board*, *Saved in this
-browser only*, or *Can't reach the shared board*. Until a URL is set it is the
-middle one — the site works, but each browser keeps its own copy.
+The footer always says where you stand: *Shared board*, *Connecting…*, or
+*Can't reach the shared board* (in which case your changes are kept in this
+browser and are not lost).
 
-When new photos or cleaner names ship in the catalog, boards already in use pick
-them up automatically — except on gifts someone has edited by hand, which are
-left alone.
+### If the family ever outgrows it
+
+Set `VITE_FIREBASE_DB`, or `FIREBASE_DB` in `src/lib/remote.js`, to a Firebase
+Realtime Database URL and that takes over instead --- same data, same behaviour,
+but with real accounts and rules if you ever want them.
+
+### When photos and names improve
+
+Catalog updates flow into the live board automatically, so everyone gets the
+better photo. Gifts somebody has edited by hand are left alone.
 
 ## Deploying
 

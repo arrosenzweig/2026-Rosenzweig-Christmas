@@ -1,10 +1,10 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SEED_ITEMS, SEED_NOTES } from '../data/seed.js';
 import { placeholderImage } from './images.js';
 import { cleanTitle, searchLinkFor } from './searchAgent.js';
 import { CATALOG } from '../data/catalog.js';
 import { profileById } from '../data/profiles.js';
-import { dropItem, isShared, loadBoard, patchItem, putClaim, putItem, putProfile, seedBoard } from './remote.js';
+import { ensureBoard, loadBoard, mutateBoard } from './remote.js';
 
 export const PENDING_DAYS = 5;
 export const PENDING_MS = PENDING_DAYS * 24 * 60 * 60 * 1000;
@@ -137,7 +137,11 @@ const StoreContext = createContext(null);
 export function StoreProvider({ children }) {
   const [state, setState] = useState(load);
   const [profileId, setProfileId] = useState(() => localStorage.getItem(PROFILE_KEY) || null);
-  const [status, setStatus] = useState(isShared() ? 'connecting' : 'local');
+  const [status, setStatus] = useState('connecting');
+
+  // what we last knew the board to be --- used when the server has nothing yet
+  const boardRef = useRef(null);
+  boardRef.current = { items: state.items, claims: state.claims, profiles: state.profiles || {} };
 
   useEffect(() => persist(state), [state]);
 
@@ -146,69 +150,71 @@ export function StoreProvider({ children }) {
     else localStorage.removeItem(PROFILE_KEY);
   }, [profileId]);
 
+  const adopt = useCallback((board) => {
+    const { items, changed } = refreshSeedItems(board.items);
+    setState({ version: 1, items, claims: expireClaims(board.claims), profiles: board.profiles || {} });
+    // a nicer photo or a cleaner name has shipped --- share it with everyone
+    if (changed.length) {
+      mutateBoard((b) => ({
+        ...b,
+        items: b.items.map((it) => {
+          const fix = changed.find((c) => c.id === it.id);
+          return fix && !it.edited ? { ...it, ...fix.patch } : it;
+        }),
+      }), boardRef.current).catch(() => {});
+    }
+  }, []);
+
+  /** Write a change to the shared board, keeping an eye on whether it lands. */
+  const push = useCallback((change) => {
+    mutateBoard(change, boardRef.current)
+      .then(() => setStatus('shared'))
+      .catch((err) => {
+        console.warn('Could not save to the shared board --- kept in this browser', err);
+        setStatus('offline');
+      });
+  }, []);
+
   // ---- first contact with the shared board --------------------------------
   useEffect(() => {
     let dead = false;
-
     (async () => {
-      if (!isShared()) {
-        // local only: still take new photos and names from the catalog
-        setState((s) => {
-          const { items } = refreshSeedItems(s.items);
-          return items === s.items ? s : { ...s, items };
-        });
-        return;
-      }
-
       try {
-        const board = await loadBoard();
+        // if the server is empty, put up whatever this browser already has ---
+        // that way a wiped board is rebuilt from a real list, not from scratch
+        const starter = boardRef.current.items.length ? boardRef.current : buildSeed();
+        const board = await ensureBoard(starter);
         if (dead) return;
-
-        if (!board.items.length) {
-          // nobody has used it yet --- put the starting lists up there
-          const seeded = buildSeed();
-          await seedBoard(seeded);
-          if (!dead) setState(seeded);
-        } else {
-          const { items, changed } = refreshSeedItems(board.items);
-          if (!dead) {
-            setState({ version: 1, items, claims: expireClaims(board.claims), profiles: board.profiles });
-          }
-          // push catalog fixes back so everyone else sees them too
-          changed.forEach(({ id, patch }) => patchItem(id, patch).catch(() => {}));
-        }
-        if (!dead) setStatus('shared');
+        adopt(board);
+        setStatus('shared');
       } catch (err) {
         console.warn('Could not reach the shared board --- using this browser only', err);
         if (!dead) setStatus('offline');
       }
     })();
-
     return () => {
       dead = true;
     };
-  }, []);
+  }, [adopt]);
 
   // ---- keep every tab in step ---------------------------------------------
   useEffect(() => {
-    if (!isShared()) return undefined;
     const t = setInterval(async () => {
-      try {
-        const board = await loadBoard();
-        if (!board) return;
-        setState((s) => {
-          const next = {
-            version: 1,
-            items: refreshSeedItems(board.items).items,
-            claims: expireClaims(board.claims),
-            profiles: board.profiles,
-          };
-          return JSON.stringify(next) === JSON.stringify(s) ? s : next;
-        });
-        setStatus('shared');
-      } catch {
+      const board = await loadBoard();
+      if (!board) {
         setStatus('offline');
+        return;
       }
+      setState((s) => {
+        const next = {
+          version: 1,
+          items: refreshSeedItems(board.items).items,
+          claims: expireClaims(board.claims),
+          profiles: board.profiles || {},
+        };
+        return JSON.stringify(next) === JSON.stringify(s) ? s : next;
+      });
+      setStatus('shared');
     }, 5000);
     return () => clearInterval(t);
   }, []);
@@ -219,10 +225,7 @@ export function StoreProvider({ children }) {
       setState((s) => {
         const claims = expireClaims(s.claims);
         if (claims === s.claims) return s;
-        // let the hold go on the shared board as well
-        Object.keys(s.claims).forEach((id) => {
-          if (!claims[id]) putClaim(id, null).catch(() => {});
-        });
+        mutateBoard((b) => ({ ...b, claims: expireClaims(b.claims) }), boardRef.current).catch(() => {});
         return { ...s, claims };
       });
     }, 60000);
@@ -233,24 +236,27 @@ export function StoreProvider({ children }) {
     const id = `i-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const entry = { ...item, id, createdAt: Date.now() };
     setState((s) => ({ ...s, items: [...s.items, entry] }));
-    putItem(entry).catch((err) => console.warn('Could not save that gift to the shared board', err));
+    push((b) => ({ ...b, items: [...b.items.filter((i) => i.id !== entry.id), entry] }));
     return id;
-  }, []);
+  }, [push]);
 
   const updateItem = useCallback((id, patch) => {
     setState((s) => ({ ...s, items: s.items.map((it) => (it.id === id ? { ...it, ...patch } : it)) }));
-    patchItem(id, patch).catch((err) => console.warn('Could not save that change', err));
-  }, []);
+    push((b) => ({ ...b, items: b.items.map((it) => (it.id === id ? { ...it, ...patch } : it)) }));
+  }, [push]);
 
   const deleteItem = useCallback((id) => {
-    dropItem(id).catch((err) => console.warn('Could not remove that gift from the shared board', err));
-    putClaim(id, null).catch(() => {});
+    push((b) => {
+      const claims = { ...b.claims };
+      delete claims[id];
+      return { ...b, items: b.items.filter((it) => it.id !== id), claims };
+    });
     setState((s) => {
       const claims = { ...s.claims };
       delete claims[id];
       return { ...s, items: s.items.filter((it) => it.id !== id), claims };
     });
-  }, []);
+  }, [push]);
 
   /** status: 'pending' | 'bought' | null (null clears your claim). */
   const setClaim = useCallback((itemId, status, by) => {
@@ -261,37 +267,42 @@ export function StoreProvider({ children }) {
       else claims[itemId] = claim;
       return { ...s, claims };
     });
-    putClaim(itemId, claim).catch((err) => console.warn('Could not save that to the shared board', err));
-  }, []);
+    push((b) => {
+      const claims = { ...b.claims };
+      if (!claim) delete claims[itemId];
+      else claims[itemId] = claim;
+      return { ...b, claims };
+    });
+  }, [push]);
 
   // ------------------------------------------------ profile image & notes --
   const setProfileImage = useCallback((owner, image) => {
     setState((s) => {
       const meta = { ...(s.profiles[owner] || { notes: [] }), image };
-      putProfile(owner, meta).catch((err) => console.warn('Could not save your picture', err));
+      push((b) => ({ ...b, profiles: { ...b.profiles, [owner]: meta } }));
       return { ...s, profiles: { ...s.profiles, [owner]: meta } };
     });
-  }, []);
+  }, [push]);
 
   const addNote = useCallback((owner, note) => {
     setState((s) => {
       const current = s.profiles[owner] || { image: '', notes: [] };
       const entry = { ...note, id: `n-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, createdAt: Date.now() };
       const meta = { ...current, notes: [...current.notes, entry] };
-      putProfile(owner, meta).catch((err) => console.warn('Could not save that note', err));
+      push((b) => ({ ...b, profiles: { ...b.profiles, [owner]: meta } }));
       return { ...s, profiles: { ...s.profiles, [owner]: meta } };
     });
-  }, []);
+  }, [push]);
 
   const deleteNote = useCallback((owner, noteId) => {
     setState((s) => {
       const current = s.profiles[owner];
       if (!current) return s;
       const meta = { ...current, notes: current.notes.filter((n) => n.id !== noteId) };
-      putProfile(owner, meta).catch((err) => console.warn('Could not remove that note', err));
+      push((b) => ({ ...b, profiles: { ...b.profiles, [owner]: meta } }));
       return { ...s, profiles: { ...s.profiles, [owner]: meta } };
     });
-  }, []);
+  }, [push]);
 
   const resetEverything = useCallback(() => setState(buildSeed()), []);
 
@@ -314,7 +325,7 @@ export function StoreProvider({ children }) {
       deleteNote,
       resetEverything,
     }),
-    [state, profileId, status, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
+    [state, profileId, status, push, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
