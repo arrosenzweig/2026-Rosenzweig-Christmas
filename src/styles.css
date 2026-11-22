@@ -495,3 +495,43 @@ p.editable { margin: 0; }
 .board-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
 .board-state.local .board-dot { background: var(--gold); }
 .board-state.offline .board-dot { background: var(--red); }
+
+/* a quiet line on photos the search agent found, rather than ones someone
+   uploaded themselves. The owner can tick the photo off on their own list,
+   which takes the line off everybody else's view. */
+.ai-credit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  pointer-events: none;
+  text-align: center;
+  font-size: 8.5px;
+  letter-spacing: 0.4px;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: rgba(43, 21, 18, 0.34);
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.85) 60%);
+  padding: 6px 4px 3px;
+}
+
+.photo-approve {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--ink-dim);
+  cursor: pointer;
+  user-select: none;
+}
+.photo-approve input {
+  accent-color: var(--green);
+  width: 14px;
+  height: 14px;
+  flex: none;
+  cursor: pointer;
+}
+.photo-approve:hover { color: var(--ink); }
+.photo-approve.is-approved { color: var(--green-dark); font-weight: 600; }

@@ -128,6 +128,9 @@ export async function enrich(draft, accent) {
     link: (draft.link || '').trim(),
     image: draft.image || '',
   };
+  // a photo the person picked themselves is theirs; anything the elf digs up
+  // afterwards is credited to the agent on the card
+  const imageBy = draft.image ? 'you' : 'agent';
 
   // --- stage 1: your own search endpoint ---------------------------------
   if (API && (!given.title || !given.link || !given.image)) {
@@ -143,7 +146,7 @@ export async function enrich(draft, accent) {
         if (found.link && !given.link) given.link = found.link;
         if (found.image && !given.image) given.image = found.image;
         if (given.title && given.link && given.image) {
-          return { ...given, foundBy: 'search' };
+          return { ...given, imageBy, foundBy: 'search' };
         }
       }
     } catch {
@@ -167,6 +170,7 @@ export async function enrich(draft, accent) {
     note: given.note,
     link: given.link || searchLinkFor(title),
     image: given.image || placeholderImage(title, accent),
+    imageBy,
     foundBy: given.image ? 'link' : 'offline',
   };
 }

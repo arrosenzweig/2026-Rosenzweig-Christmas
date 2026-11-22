@@ -52,6 +52,8 @@ function buildSeed() {
       title,
       link: found.link || raw.link || searchLinkFor(title),
       image: found.image || raw.image || placeholderImage(title, accent),
+      // these photos were found for us by the search agent, not uploaded
+      imageBy: 'agent',
       notes,
       priority: raw.priority || 'med',
       createdAt: SEED_EPOCH + i * 60000,
@@ -82,11 +84,18 @@ function refreshSeedItems(items) {
       seeded.title === item.title &&
       seeded.image === item.image &&
       seeded.link === item.link &&
-      seeded.notes === item.notes
+      seeded.notes === item.notes &&
+      item.imageBy
     ) {
       return item;
     }
-    const patch = { title: seeded.title, image: seeded.image, link: seeded.link, notes: seeded.notes };
+    const patch = {
+      title: seeded.title,
+      image: seeded.image,
+      link: seeded.link,
+      notes: seeded.notes,
+      imageBy: item.imageBy || 'agent',
+    };
     changed.push({ id: item.id, patch });
     return { ...item, ...patch };
   });

@@ -127,6 +127,14 @@ Set `VITE_FIREBASE_DB`, or `FIREBASE_DB` in `src/lib/remote.js`, to a Firebase
 Realtime Database URL and that takes over instead --- same data, same behaviour,
 but with real accounts and rules if you ever want them.
 
+### Whose photo is it
+
+A photo the search agent found carries a faint line along the bottom of the
+picture: **Warning! Default image by AI agent**. On your own list each of those
+has an **Approve this photo** checkbox --- tick it and the line disappears from
+everyone else's view of your list, though you still see it on yours. Upload your
+own photo and there is no line and no checkbox, because nothing was guessed.
+
 ### When photos and names improve
 
 Catalog updates flow into the live board automatically, so everyone gets the

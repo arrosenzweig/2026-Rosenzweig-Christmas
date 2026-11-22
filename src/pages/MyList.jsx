@@ -49,6 +49,7 @@ export default function MyList() {
         title: filled.title,
         link: filled.link,
         image: filled.image,
+        imageBy: filled.imageBy,
         notes: [filled.note, draft.notes.trim()].filter(Boolean).join(' · '),
         priority: draft.priority,
       });

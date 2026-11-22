@@ -18,13 +18,20 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
   const hidden = variant === 'browse' && claim?.status === 'bought' && !mine;
   const candyCane = variant === 'browse' && claim?.status === 'pending';
   const editable = variant === 'own' && typeof onEdit === 'function';
+  // older items predate the credit, so work it out from the photo itself: an
+  // uploaded photo is a data: URL, anything else was found for us
+  const foundByAgent =
+    (item.imageBy || (item.image?.startsWith('data:image/jpeg') ? 'you' : 'agent')) === 'agent';
+  // the owner always sees the credit --- everyone else stops seeing it once the
+  // owner has ticked the photo off as a good likeness
+  const showCredit = foundByAgent && !hidden && (editable || !item.imageApproved);
   const photoRef = useRef(null);
 
   async function onPickPhoto(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      onEdit(item.id, { image: await fileToResizedDataUrl(file) });
+      onEdit(item.id, { image: await fileToResizedDataUrl(file), imageBy: 'you', imageApproved: false });
     } catch (err) {
       console.warn('Could not read that photo', err);
     }
@@ -70,6 +77,8 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
           </>
         )}
 
+        {showCredit && <span className="ai-credit">Warning! Default image by AI agent</span>}
+
         {candyCane && <div className="candy-cane-watermark" aria-hidden="true" />}
         {hidden && (
           <div className="bought-cover">
@@ -80,6 +89,17 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
       </div>
 
       <div className="gift-body">
+        {editable && foundByAgent && (
+          <label className={`photo-approve ${item.imageApproved ? 'is-approved' : ''}`}>
+            <input
+              type="checkbox"
+              checked={Boolean(item.imageApproved)}
+              onChange={(e) => onEdit(item.id, { imageApproved: e.target.checked })}
+            />
+            {item.imageApproved ? 'Photo approved — label hidden from everyone else' : 'Approve this photo'}
+          </label>
+        )}
+
         {hidden && <span className="gift-title muted">A secret 🤫</span>}
 
         {!hidden && editable && (
