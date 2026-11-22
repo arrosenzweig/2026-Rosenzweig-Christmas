@@ -8,6 +8,12 @@
 // they may point at one particular shop's version of the thing; they are a
 // picture and a reference, not a decision about what to buy.
 //
+// THE BRAND RULE: never source a branded photo for an item whose owner did not
+// name a brand. If they wrote "fake French tip nails", the picture is a plain
+// set of French tip nails --- not one shop's box with its logo across it. Only
+// when they named it themselves ("Athena Club razor refills", "Brahmin bag",
+// "Apple iPad") does a brand belong in the picture or the title.
+//
 // Keyed by the original wording in seed.js. Items missing from here keep their
 // original title and get a drawn placeholder. Photos are hotlinked from the
 // shops' own CDNs; if one stops loading, the card falls back to a

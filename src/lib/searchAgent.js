@@ -17,6 +17,11 @@
 //  3. Offline filler. A shopping-search link built from the title, and a
 //     wrapped-present card with the title written on it.
 //
+// THE BRAND RULE, for whatever fills these in: a brand only belongs in the
+// picture or the name when the person asked for that brand. "Fake French tip
+// nails" gets a plain set of French tip nails; "Rhode peptide lip treatment"
+// gets Rhode. A search endpoint plugged in at stage 1 should be told the same.
+//
 // Titles coming out of here are always Title Cased, and trailing asides
 // ("--- opal please", "(good quality)") are split off into a short
 // short note under the title rather than left in the name.

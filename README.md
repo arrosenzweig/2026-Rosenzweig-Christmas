@@ -76,6 +76,14 @@ Whatever stage answers, names come out Title Cased and trailing asides are split
 into a short note underneath: "Kendra Scott earrings --- opal please" becomes
 **Kendra Scott Earrings** with *Opal* as its subtitle.
 
+### The brand rule
+
+A brand only ever appears in a gift's picture or its name when the person asked
+for that brand. "Fake French tip nails" gets a plain photo of French tip nails,
+not one shop's box with a logo across it; "Rhode peptide lip treatment" gets
+Rhode, because that is what was asked for. Anything plugged in at stage 1 should
+be told the same thing.
+
 ### The catalog
 
 All 50 items from the list document were looked up ahead of time by web-search
