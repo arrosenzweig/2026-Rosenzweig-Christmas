@@ -39,12 +39,13 @@ photo, the title, the note, the link, the priority. Hovering shows you what can
 be edited; Enter or clicking away saves, Escape puts it back. The small **×** in
 the corner removes the item. Sort by A→Z, newest added, or highest priority.
 
-**Christmas Wishes.** Pick one person — one at a time — and you get their page:
-profile picture, name beneath it, then their gift notes laid out. Below that, if
-you've claimed anything for them, a **Gifts you're giving** section; that section
-simply isn't there when you haven't claimed anything. Below that, the rest of
-their list with the three sorts. It's read-only, and you never see your own list
-here. For each item you can mark:
+**Christmas Wishes.** Pick one person — one at a time — and you get their page.
+It opens with their profile picture, their name beneath it and how many items
+they have below that, with their gift notes laid out alongside. Then, if you've
+claimed anything for them, a **Gifts you're giving** section; that section simply
+isn't there when you haven't claimed anything. Then the rest of their list with
+the three sorts. It's read-only, and you never see your own list here. For each
+item you can mark:
 
 - **Pending purchase** — covered with a red candy-cane watermark for everyone
   else. Holds expire after **5 days**; after that the item goes back on the

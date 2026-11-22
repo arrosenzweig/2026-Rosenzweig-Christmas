@@ -60,13 +60,21 @@ export default function ChristmasWishes() {
       ) : (
         <div className={`wish-view texture-${who.theme.texture}`} style={themeVars(who)}>
           <header className="wish-header">
-            <Avatar profile={who} image={meta.image} size={128} />
-            <h3 className="wish-name">{who.name}</h3>
-            {meta.notes.length > 0 ? (
-              <ProfileNotes notes={meta.notes} />
-            ) : (
-              <p className="empty small centered">{who.name} hasn&apos;t written any gift notes yet.</p>
-            )}
+            <div className="wish-who">
+              <Avatar profile={who} image={meta.image} size={128} />
+              <h3 className="wish-name">{who.name}</h3>
+              <span className="wish-count">
+                {giving.length + rest.length} {giving.length + rest.length === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+
+            <div className="wish-notes">
+              {meta.notes.length > 0 ? (
+                <ProfileNotes notes={meta.notes} />
+              ) : (
+                <p className="empty small">{who.name} hasn&apos;t written any gift notes yet.</p>
+              )}
+            </div>
           </header>
 
           {giving.length > 0 && (
@@ -80,14 +88,18 @@ export default function ChristmasWishes() {
           )}
 
           <div className="list-block">
-            <h4 className="list-heading">
-              <span aria-hidden="true">✨</span> {giving.length > 0 ? `The rest of ${who.name}'s list` : `${who.name}'s list`}
-              <small>{rest.length} {rest.length === 1 ? 'item' : 'items'}</small>
-            </h4>
+            {giving.length > 0 && (
+              <h4 className="list-heading">
+                <span aria-hidden="true">✨</span> Everything else
+                <small>{rest.length} {rest.length === 1 ? 'item' : 'items'}</small>
+              </h4>
+            )}
             <SortBar sort={sort} setSort={setSort} />
             {rest.length === 0 ? (
               <p className="empty small">
-                {items.some((i) => i.owner === who.id) ? 'Everything here is already spoken for by you. 🎅' : `${who.name} hasn't added anything yet.`}
+                {giving.length > 0
+                  ? 'Everything here is already spoken for by you. 🎅'
+                  : `${who.name} hasn't added anything yet.`}
               </p>
             ) : (
               <div className="gift-grid">{rest.map(card)}</div>
