@@ -71,6 +71,20 @@ export const PROFILES = [
   },
 ];
 
+/**
+ * The same, but letting somebody's own answers from the profile questionnaire
+ * win: up to two colours they picked for themselves.
+ */
+export function themeVarsFor(profile, meta) {
+  const vars = themeVars(profile);
+  const colors = (meta?.style?.colors || []).filter(Boolean);
+  if (colors.length) {
+    vars['--accent'] = colors[0];
+    vars['--accent-2'] = colors[1] || `color-mix(in srgb, ${colors[0]} 55%, #2b1512)`;
+  }
+  return vars;
+}
+
 /** The CSS custom properties one person's theme turns into. */
 export function themeVars(profile) {
   const t = profile.theme;

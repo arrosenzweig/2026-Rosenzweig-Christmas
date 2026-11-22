@@ -97,6 +97,21 @@ document's original wording, so redoing that research only touches that one
 file. If a shop ever stops serving a photo, the card falls back to the drawn
 placeholder rather than showing a broken image.
 
+## Make this page yours
+
+At the foot of **My Profile** there is a short questionnaire that restyles *your
+own view* of the site and nobody else's:
+
+1. **Up to two colours** --- they become your buttons, headings and highlights.
+2. **Three things for your background** --- typed in plain words. Recognised
+   words ("dragons", "matcha", "snowflakes") turn into pictures scattered faintly
+   behind the page; anything else is written out in your own words instead.
+3. **One special something** --- a single element that drifts slowly across.
+
+None of it touches anyone's list, and none of it changes what other people see.
+"Back to default" puts your profile's own colours back. The word-to-picture
+list lives in `src/data/motifs.js`, so it is easy to teach it new words.
+
 ## Styling
 
 `src/data/profiles.js` is the whole look of the signed-in site. Each person

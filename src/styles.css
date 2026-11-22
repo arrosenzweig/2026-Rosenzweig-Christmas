@@ -563,6 +563,102 @@ p.editable { margin: 0; }
 .photo-approve:hover { color: var(--ink); }
 .photo-approve.is-approved { color: var(--green-dark); font-weight: 600; }
 
+/* --------------------------------------- wallpaper somebody designed ----- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.backdrop-item {
+  position: absolute;
+  font-size: calc(34px * var(--scale, 1));
+  line-height: 1;
+  opacity: 0.17;
+  animation: driftAbout 11s ease-in-out infinite;
+  user-select: none;
+}
+.backdrop-item.is-word {
+  font-family: Georgia, serif;
+  font-size: calc(19px * var(--scale, 1));
+  font-style: italic;
+  color: var(--accent-2);
+  opacity: 0.16;
+  white-space: nowrap;
+}
+@keyframes driftAbout {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+  50% { transform: translate3d(8px, -14px, 0) rotate(4deg); }
+}
+
+.backdrop-special {
+  position: absolute;
+  left: -16vw;
+  top: 24%;
+  font-size: 54px;
+  opacity: 0.3;
+  animation: driftAcross 38s linear infinite;
+  filter: drop-shadow(0 4px 10px rgba(43, 21, 18, 0.15));
+}
+.backdrop-special.is-word {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-style: italic;
+  color: var(--accent-2);
+  white-space: nowrap;
+}
+@keyframes driftAcross {
+  0% { transform: translate(0, 0) rotate(-3deg); }
+  50% { transform: translate(60vw, -6vh) rotate(3deg); }
+  100% { transform: translate(126vw, 2vh) rotate(-3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-item, .backdrop-special { animation: none; }
+  .backdrop-special { left: 8vw; }
+}
+
+/* ------------------------------------------------- the questionnaire ----- */
+.quiz-card {
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 30px;
+  box-shadow: 0 6px 18px rgba(43, 21, 18, 0.07);
+}
+.quiz { display: flex; flex-direction: column; gap: 20px; }
+.quiz-q h4 { margin: 0 0 2px; font-size: 15px; color: var(--accent-2); }
+.quiz-q > p { margin: 0 0 10px; font-size: 13px; color: var(--ink-dim); }
+
+.quiz-colors { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.quiz-colors-label {
+  width: 56px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--ink-dim); font-weight: 700;
+}
+.swatch {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(43, 21, 18, 0.15); padding: 0;
+}
+.swatch:hover { transform: scale(1.12); }
+.swatch.active { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(43, 21, 18, 0.12); }
+.swatch-custom {
+  width: 34px; height: 28px; padding: 0; border: 2px solid var(--line); border-radius: 8px; background: #fff;
+}
+
+.quiz-things { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.quiz-thing-row { display: flex; align-items: center; gap: 8px; }
+.quiz-thing-row input { flex: 1; min-width: 0; }
+.quiz-thing-preview { font-size: 22px; width: 28px; text-align: center; }
+.quiz-saved { font-size: 13px; color: var(--green-dark); font-weight: 700; }
+.quiz-preview { display: inline-flex; gap: 6px; font-size: 20px; opacity: 0.8; }
+
+@media (max-width: 620px) {
+  .quiz-card { padding: 14px; }
+  .quiz-colors-label { width: 100%; }
+  .swatch { width: 26px; height: 26px; }
+}
+
 /* ---------------------------------------------- cropping a profile photo -- */
 .cropper-backdrop {
   position: fixed;

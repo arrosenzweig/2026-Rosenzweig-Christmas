@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import Avatar from '../components/Avatar.jsx';
 import PhotoCropper from '../components/PhotoCropper.jsx';
 import ProfileNotes from '../components/ProfileNotes.jsx';
+import StyleQuestionnaire from '../components/StyleQuestionnaire.jsx';
 import { EMOJI_GROUPS } from '../data/emojis.js';
 import { useStore } from '../lib/store.jsx';
 import { fileToDataUrl, fileToResizedDataUrl } from '../lib/images.js';
@@ -13,7 +14,8 @@ const KINDS = [
 ];
 
 export default function MyProfile() {
-  const { profile, profileId, profileMeta, setProfileImage, setProfileEmoji, addNote, deleteNote } = useStore();
+  const { profile, profileId, profileMeta, setProfileImage, setProfileEmoji, setProfileStyle, addNote, deleteNote } =
+    useStore();
   const meta = profileMeta(profileId);
 
   const [kind, setKind] = useState('text');
@@ -206,6 +208,18 @@ export default function MyProfile() {
           <ProfileNotes notes={meta.notes} onDelete={(id) => deleteNote(profileId, id)} />
         </div>
       )}
+
+      {/* ------------------------------------------------ design your page -- */}
+      <h3 className="shop-heading">
+        Make this page yours <small>only you see these changes</small>
+      </h3>
+      <p className="shop-note">
+        Answer as much or as little as you like. It changes the colours and the background of your own view
+        of the site — never anyone&apos;s list, and never what other people see.
+      </p>
+      <div className="quiz-card">
+        <StyleQuestionnaire style={meta.style} onSave={(style) => setProfileStyle(profileId, style)} />
+      </div>
 
       {cropping && (
         <PhotoCropper

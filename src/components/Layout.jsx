@@ -1,5 +1,6 @@
 import Avatar from './Avatar.jsx';
-import { themeVars } from '../data/profiles.js';
+import ProfileBackdrop from './ProfileBackdrop.jsx';
+import { themeVarsFor } from '../data/profiles.js';
 import { useStore } from '../lib/store.jsx';
 
 const TABS = [
@@ -11,11 +12,14 @@ const TABS = [
 
 export default function Layout({ tab, setTab, children }) {
   const { profile, setProfileId, claims, profileId, profileMeta, status } = useStore();
+  const meta = profileMeta(profileId);
+  const style = meta.style || {};
   const mine = Object.values(claims).filter((c) => c.by === profileId);
   const pendingCount = mine.filter((c) => c.status === 'pending').length;
 
   return (
-    <div className={`app texture-${profile.theme.texture}`} style={themeVars(profile)}>
+    <div className={`app texture-${profile.theme.texture}`} style={themeVarsFor(profile, meta)}>
+      <ProfileBackdrop items={style.background} special={style.special} />
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">🎄</span>
@@ -28,8 +32,8 @@ export default function Layout({ tab, setTab, children }) {
         <button className="who" type="button" onClick={() => setProfileId(null)} title="Switch profile">
           <Avatar
             profile={profile}
-            image={profileMeta(profileId).image}
-            emoji={profileMeta(profileId).emoji}
+            image={meta.image}
+            emoji={meta.emoji}
             size={32}
             className="who-avatar"
           />
