@@ -3,7 +3,7 @@
  * not. The size comes in as a CSS variable so a phone-sized screen can shrink
  * it from the stylesheet.
  */
-export default function Avatar({ profile, image, size = 96, className = '' }) {
+export default function Avatar({ profile, image, emoji, size = 96, className = '' }) {
   return (
     <span
       className={`avatar ${className}`}
@@ -14,7 +14,11 @@ export default function Avatar({ profile, image, size = 96, className = '' }) {
         '--accent-2': profile.theme.accent2,
       }}
     >
-      {image ? <img src={image} alt={`${profile.name}'s profile picture`} /> : <span aria-hidden="true">{profile.emoji}</span>}
+      {image ? (
+        <img src={image} alt={`${profile.name}'s profile picture`} />
+      ) : (
+        <span aria-hidden="true">{emoji || profile.emoji}</span>
+      )}
     </span>
   );
 }

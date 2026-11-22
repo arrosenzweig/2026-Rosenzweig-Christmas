@@ -26,7 +26,13 @@ export default function Layout({ tab, setTab, children }) {
         </div>
 
         <button className="who" type="button" onClick={() => setProfileId(null)} title="Switch profile">
-          <Avatar profile={profile} image={profileMeta(profileId).image} size={32} className="who-avatar" />
+          <Avatar
+            profile={profile}
+            image={profileMeta(profileId).image}
+            emoji={profileMeta(profileId).emoji}
+            size={32}
+            className="who-avatar"
+          />
           <span className="who-name">{profile.name}</span>
           <span className="who-switch">switch</span>
         </button>

@@ -25,7 +25,13 @@ export default function ProfilePicker() {
                   style={{ '--accent': p.theme.accent, '--accent-2': p.theme.accent2 }}
                   onClick={() => setProfileId(p.id)}
                 >
-                  <Avatar profile={p} image={profileMeta(p.id).image} size={118} className="picker-avatar" />
+                  <Avatar
+                    profile={p}
+                    image={profileMeta(p.id).image}
+                    emoji={profileMeta(p.id).emoji}
+                    size={118}
+                    className="picker-avatar"
+                  />
                   <span className="picker-name">{p.name}</span>
                   <span className="picker-count">{count} {count === 1 ? 'wish' : 'wishes'}</span>
                 </button>

@@ -56,7 +56,7 @@ export default function ChristmasWishes() {
             style={{ '--chip': p.theme.accent }}
             onClick={() => setSelected(selected === p.id ? null : p.id)}
           >
-            <span aria-hidden="true">{p.emoji}</span> {p.name}
+            <span aria-hidden="true">{profileMeta(p.id).emoji || p.emoji}</span> {p.name}
           </button>
         ))}
       </div>
@@ -67,7 +67,7 @@ export default function ChristmasWishes() {
         <div className={`wish-view texture-${who.theme.texture}`} style={themeVars(who)}>
           <header className="wish-header">
             <div className="wish-who">
-              <Avatar profile={who} image={meta.image} size={128} />
+              <Avatar profile={who} image={meta.image} emoji={meta.emoji} size={128} />
               <h3 className="wish-name">{who.name}</h3>
               <span className="wish-count">
                 {giving.length + rest.length} {giving.length + rest.length === 1 ? 'item' : 'items'}

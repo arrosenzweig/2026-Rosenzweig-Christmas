@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import Avatar from '../components/Avatar.jsx';
+import PhotoCropper from '../components/PhotoCropper.jsx';
 import ProfileNotes from '../components/ProfileNotes.jsx';
+import { EMOJI_GROUPS } from '../data/emojis.js';
 import { useStore } from '../lib/store.jsx';
-import { fileToResizedDataUrl } from '../lib/images.js';
+import { fileToDataUrl, fileToResizedDataUrl } from '../lib/images.js';
 
 const KINDS = [
   { id: 'text', label: '📝 Note' },
@@ -11,7 +13,7 @@ const KINDS = [
 ];
 
 export default function MyProfile() {
-  const { profile, profileId, profileMeta, setProfileImage, addNote, deleteNote } = useStore();
+  const { profile, profileId, profileMeta, setProfileImage, setProfileEmoji, addNote, deleteNote } = useStore();
   const meta = profileMeta(profileId);
 
   const [kind, setKind] = useState('text');
@@ -19,18 +21,21 @@ export default function MyProfile() {
   const [url, setUrl] = useState('');
   const [photo, setPhoto] = useState('');
   const [error, setError] = useState('');
+  const [cropping, setCropping] = useState(''); // the photo being lined up
   const avatarRef = useRef(null);
   const photoRef = useRef(null);
 
-  async function onAvatar(e) {
+  /** Picking a file opens the cropper rather than saving it straight away. */
+  async function onAvatarPicked(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      setProfileImage(profileId, await fileToResizedDataUrl(file));
+      setCropping(await fileToDataUrl(file));
       setError('');
     } catch (err) {
       setError(err.message);
     }
+    e.target.value = '';
   }
 
   async function onNotePhoto(e) {
@@ -64,27 +69,35 @@ export default function MyProfile() {
     if (photoRef.current) photoRef.current.value = '';
   }
 
+  const chosenEmoji = meta.emoji || profile.emoji;
+
   return (
     <section>
       <h2 className="page-title">My Profile</h2>
       <p className="page-sub">
-        Your picture and your general gift notes — the things that are true of <em>everything</em> on your
-        list: sizes, colors, allergies, what not to buy. Everyone sees these when they open your list.
+        Your picture, the emoji that stands for you around the site, and your general gift notes — the
+        things that are true of <em>everything</em> on your list: sizes, colors, allergies, what not to buy.
+        Everyone sees these when they open your list.
       </p>
 
       <div className="profile-editor">
         <div className="profile-avatar-edit">
-          <Avatar profile={profile} image={meta.image} size={140} />
+          <Avatar profile={profile} image={meta.image} emoji={meta.emoji} size={140} />
           <div className="profile-avatar-actions">
             <button className="btn" type="button" onClick={() => avatarRef.current?.click()}>
               {meta.image ? 'Change picture' : 'Upload a picture'}
             </button>
             {meta.image && (
-              <button className="btn ghost" type="button" onClick={() => setProfileImage(profileId, '')}>
-                Remove
-              </button>
+              <>
+                <button className="btn" type="button" onClick={() => setCropping(meta.image)}>
+                  Adjust
+                </button>
+                <button className="btn ghost" type="button" onClick={() => setProfileImage(profileId, '')}>
+                  Remove
+                </button>
+              </>
             )}
-            <input ref={avatarRef} type="file" accept="image/*" hidden onChange={onAvatar} />
+            <input ref={avatarRef} type="file" accept="image/*" hidden onChange={onAvatarPicked} />
           </div>
           <strong className="profile-editor-name">{profile.name}</strong>
         </div>
@@ -149,6 +162,42 @@ export default function MyProfile() {
         </form>
       </div>
 
+      {/* ---------------------------------------------------------- emoji -- */}
+      <h3 className="shop-heading">Your emoji <small>stands for you wherever your picture doesn&apos;t fit</small></h3>
+      <div className="emoji-picker">
+        <div className="emoji-current">
+          <span className="emoji-current-mark">{chosenEmoji}</span>
+          <span>
+            {meta.emoji ? 'Your pick' : 'Picked for you'}
+            {meta.emoji && (
+              <button className="btn ghost" type="button" onClick={() => setProfileEmoji(profileId, '')}>
+                Reset
+              </button>
+            )}
+          </span>
+        </div>
+
+        {EMOJI_GROUPS.map((group) => (
+          <div className="emoji-group" key={group.name}>
+            <h4>{group.name}</h4>
+            <div className="emoji-grid">
+              {group.emojis.map((e) => (
+                <button
+                  key={e}
+                  type="button"
+                  className={`emoji-option ${chosenEmoji === e ? 'active' : ''}`}
+                  aria-pressed={chosenEmoji === e}
+                  title={`Use ${e}`}
+                  onClick={() => setProfileEmoji(profileId, e)}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <h3 className="shop-heading">How your notes look to everyone else</h3>
       {meta.notes.length === 0 ? (
         <p className="empty small">No notes yet — add sizes, colors, or anything you&apos;d rather nobody bought.</p>
@@ -156,6 +205,17 @@ export default function MyProfile() {
         <div className="notes-preview">
           <ProfileNotes notes={meta.notes} onDelete={(id) => deleteNote(profileId, id)} />
         </div>
+      )}
+
+      {cropping && (
+        <PhotoCropper
+          src={cropping}
+          onCancel={() => setCropping('')}
+          onDone={(dataUrl) => {
+            setProfileImage(profileId, dataUrl);
+            setCropping('');
+          }}
+        />
       )}
     </section>
   );

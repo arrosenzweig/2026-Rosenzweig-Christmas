@@ -3,7 +3,7 @@ import ChangeWarning from '../components/ChangeWarning.jsx';
 import { profileById } from '../data/profiles.js';
 import { changedSinceClaim, formatLeft, msLeft, PENDING_DAYS, useStore } from '../lib/store.jsx';
 
-function Row({ item, claim, onClaim, changed }) {
+function Row({ item, claim, onClaim, changed, ownerEmoji }) {
   const owner = profileById(item.owner);
   const left = claim.status === 'pending' ? msLeft(claim) : null;
   const urgent = left !== null && left < 24 * 3600 * 1000;
@@ -13,7 +13,7 @@ function Row({ item, claim, onClaim, changed }) {
       <img className="shop-thumb" src={item.image} alt="" loading="lazy" />
       <div className="shop-main">
         <a className="gift-title" href={item.link} target="_blank" rel="noreferrer noopener">{item.title}</a>
-        <span className="shop-for">for {owner?.emoji} {owner?.name}</span>
+        <span className="shop-for">for {ownerEmoji || owner?.emoji} {owner?.name}</span>
         {changed && <span className="changed-flag">⚠️ {owner?.name} changed this gift</span>}
         {item.notes && <span className="gift-notes">{item.notes}</span>}
       </div>
@@ -42,7 +42,7 @@ function Row({ item, claim, onClaim, changed }) {
 }
 
 export default function SantasWorkshop() {
-  const { items, claims, profileId, setClaim, acknowledgeChange } = useStore();
+  const { items, claims, profileId, setClaim, acknowledgeChange, profileMeta } = useStore();
 
   const { pending, bought } = useMemo(() => {
     const byId = Object.fromEntries(items.map((i) => [i.id, i]));
@@ -78,7 +78,14 @@ export default function SantasWorkshop() {
       ) : (
         <div className="shop-list">
           {pending.map(({ item, claim: c }) => (
-            <Row key={item.id} item={item} claim={c} onClaim={claim} changed={hasChanged(item.id)} />
+            <Row
+              key={item.id}
+              item={item}
+              claim={c}
+              onClaim={claim}
+              changed={hasChanged(item.id)}
+              ownerEmoji={profileMeta(item.owner).emoji}
+            />
           ))}
         </div>
       )}
@@ -89,7 +96,14 @@ export default function SantasWorkshop() {
       ) : (
         <div className="shop-list">
           {bought.map(({ item, claim: c }) => (
-            <Row key={item.id} item={item} claim={c} onClaim={claim} changed={hasChanged(item.id)} />
+            <Row
+              key={item.id}
+              item={item}
+              claim={c}
+              onClaim={claim}
+              changed={hasChanged(item.id)}
+              ownerEmoji={profileMeta(item.owner).emoji}
+            />
           ))}
         </div>
       )}

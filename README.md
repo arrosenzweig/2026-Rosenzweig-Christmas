@@ -24,7 +24,10 @@ there is nothing to download, it stays sharp at any size, and it holds still for
 anyone browsing with "reduce motion" on. Choosing a tile sets who you are for
 the rest of the session.
 
-**My Profile.** Upload a profile picture and write your *general* gift notes ---
+**My Profile.** Upload a profile picture --- dragging, zooming, turning and
+straightening it in a round cropper before it is saved, and you can reopen that
+cropper any time with **Adjust**. Pick the emoji that stands for you everywhere
+your picture doesn't fit. And write your *general* gift notes ---
 sizes, colors, allergies, what not to buy. Notes can be written notes, photos or
 links, and they're about how to shop for you, not about any one gift. Everyone
 sees them when they open your list.

@@ -293,6 +293,15 @@ export function StoreProvider({ children }) {
     });
   }, [push]);
 
+  /** The emoji someone picks to stand for themselves everywhere. */
+  const setProfileEmoji = useCallback((owner, emoji) => {
+    setState((s) => {
+      const meta = { ...(s.profiles[owner] || { image: '', notes: [] }), emoji };
+      push((b) => ({ ...b, profiles: { ...b.profiles, [owner]: meta } }));
+      return { ...s, profiles: { ...s.profiles, [owner]: meta } };
+    });
+  }, [push]);
+
   const addNote = useCallback((owner, note) => {
     setState((s) => {
       const current = s.profiles[owner] || { image: '', notes: [] };
@@ -346,11 +355,12 @@ export function StoreProvider({ children }) {
       setClaim,
       acknowledgeChange,
       setProfileImage,
+      setProfileEmoji,
       addNote,
       deleteNote,
       resetEverything,
     }),
-    [state, profileId, status, push, acknowledgeChange, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
+    [state, profileId, status, push, acknowledgeChange, addItem, updateItem, deleteItem, setClaim, setProfileImage, setProfileEmoji, addNote, deleteNote, resetEverything],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

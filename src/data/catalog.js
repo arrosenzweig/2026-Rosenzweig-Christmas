@@ -198,24 +198,24 @@ export const CATALOG = {
     title: "Earbuds",
     note: "Under $20",
     link: "https://www.target.com/p/jlab-go-air-pop-true-wireless-bluetooth-earbuds-black/-/A-83647937",
-    image: "https://target.scene7.com/is/image/Target/GUEST_2aaa4389-48cf-465e-b161-dba213036573?wid=800&hei=800&fmt=pjpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Earbuds_%2888133%29.jpg/960px-Earbuds_%2888133%29.jpg",
   },
   "Simple / minimalistic necklaces": {
     title: "Minimalist Necklace",
     note: "Silver Or Gold Plated, Does Not Tarnish",
     link: "https://www.target.com/p/adornia-tarnish-resistant-18k-gold-plated-bar-necklace/-/A-1004003119",
-    image: "https://target.scene7.com/is/image/Target/GUEST_0903db70-7e6b-4f7a-84c9-2497ab72d168?wid=800&hei=800&fmt=pjpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Necklace%2C_chain_%28AM_674270-5%29.jpg/960px-Necklace%2C_chain_%28AM_674270-5%29.jpg",
   },
   "Long sleeve bodysuit or shirt (thermal)": {
     title: "Long Sleeve Thermal Top",
     note: "Size XS",
     link: "https://www.uniqlo.com/us/en/products/E478965-000/00",
-    image: "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/478965/item/goods_09_478965_3x4.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/LongJohns-20050126.jpg/960px-LongJohns-20050126.jpg",
   },
   "Towel-like bathrobe": {
     title: "Towel-Like Bathrobe",
     link: "https://www.target.com/p/roxoni-womens-100-cotton-shawl-collar-robe-terry-cloth-bathrobe/-/A-1004952683",
-    image: "https://target.scene7.com/is/image/Target/GUEST_64fcdddc-1bde-48b8-99e0-59f9b7579a93?wid=800&hei=800&fmt=pjpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Kylpytakki.jpg/960px-Kylpytakki.jpg",
   },
   "Athena Club razor refills": {
     title: "Athena Club Razor Refills",
@@ -225,7 +225,7 @@ export const CATALOG = {
   "Matcha advent calendar": {
     title: "Matcha Advent Calendar",
     link: "https://www.johnlewis.com/bird-blend-matcha-advent-calendar-300g/p115340647",
-    image: "https://media.johnlewiscontent.com/i/JohnLewis/115320857?fmt=auto&$background-off-white$&$rsp-pdp-port-640$",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Matcha-powder-2356768_1280.jpg/960px-Matcha-powder-2356768_1280.jpg",
   },
   "Shoulder shrug": {
     title: "Shoulder Shrug",
@@ -236,18 +236,17 @@ export const CATALOG = {
     title: "Fake French Tip Nails",
     note: "Good Quality",
     link: "https://www.target.com/p/olive-38-june-press-on-fake-nails-short-squoval-classic-french-42ct/-/A-86946132",
-    image: "https://target.scene7.com/is/image/Target/GUEST_770829f0-4b50-43e9-a5a9-0a62d4bf6e5e?wid=800&hei=800&fmt=pjpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Frenchmanicurewiki.jpg/960px-Frenchmanicurewiki.jpg",
   },
   "Phone wallet": {
     title: "Phone Wallet",
     link: "https://www.target.com/p/popsockets-magnetic-phone-wallet-with-grip-and-magsafe-magnetic-adapter-ring-included/-/A-83446887",
-    image: "https://target.scene7.com/is/image/Target/GUEST_e7a22f58-5701-4ab6-95bc-a7c427856a0e?wid=800&hei=800&fmt=pjpeg",
   },
   "Cheap pilates socks": {
     title: "Pilates Socks",
     note: "Cheap, Check With Me First",
     link: "https://www.target.com/p/gaiam-studio-select-barre-sock-2pk/-/A-94413600",
-    image: "https://target.scene7.com/is/image/Target/GUEST_5202585b-0f04-4eca-9749-1537c34d6608?wid=800&hei=800&fmt=pjpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Anti-slip_socks.jpg/960px-Anti-slip_socks.jpg",
   },
   "Yoga wrap top": {
     title: "Yoga Wrap Top",
