@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { SEED_ITEMS, SEED_NOTES } from '../data/seed.js';
 import { placeholderImage } from './images.js';
-import { searchLinkFor } from './searchAgent.js';
+import { cleanTitle, searchLinkFor } from './searchAgent.js';
+import { CATALOG } from '../data/catalog.js';
 import { profileById } from '../data/profiles.js';
 
 export const PENDING_DAYS = 5;
@@ -31,13 +32,22 @@ function buildSeed() {
   SEED_ITEMS.forEach((raw, i) => {
     const id = `seed-${i}`;
     const accent = profileById(raw.owner)?.theme.accent;
+    // what the search agent found for this line, if anything
+    const found = CATALOG[raw.title] || {};
+    const tidy = cleanTitle(raw.title);
+    const title = found.title || tidy.title;
+    const preference = found.note || tidy.note;
+    // the document's own aside often repeats the preference --- don't say it twice
+    const plain = (t) => String(t || '').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+    const extra = raw.notes && plain(preference).includes(plain(raw.notes)) ? '' : raw.notes;
+    const notes = [preference, extra].filter(Boolean).join(' · ');
     items.push({
       id,
       owner: raw.owner,
-      title: raw.title,
-      link: raw.link || searchLinkFor(raw.title),
-      image: raw.image || placeholderImage(raw.title, accent),
-      notes: raw.notes || '',
+      title,
+      link: found.link || raw.link || searchLinkFor(title),
+      image: found.image || raw.image || placeholderImage(title, accent),
+      notes,
       priority: raw.priority || 'med',
       createdAt: SEED_EPOCH + i * 60000,
     });
