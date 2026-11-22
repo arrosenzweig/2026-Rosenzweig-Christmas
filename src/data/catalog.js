@@ -65,6 +65,7 @@ export const CATALOG = {
   'Chargeable hand warmers': {
     title: "Rechargeable Hand Warmers",
     link: 'https://www.amazon.com/dp/B0BG5T55F5',
+    image: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Latentw%C3%A4rmespeicher.jpg",
   },
   'Floral long lasting perfume': {
     title: "Floral Long-Lasting Perfume",
@@ -198,7 +199,7 @@ export const CATALOG = {
     title: "Earbuds",
     note: "Under $20",
     link: "https://www.target.com/p/jlab-go-air-pop-true-wireless-bluetooth-earbuds-black/-/A-83647937",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Earbuds_%2888133%29.jpg/960px-Earbuds_%2888133%29.jpg",
+    image: "https://images.pexels.com/photos/32880383/pexels-photo-32880383.jpeg?auto=compress&cs=tinysrgb&w=900",
   },
   "Simple / minimalistic necklaces": {
     title: "Minimalist Necklace",
@@ -247,7 +248,7 @@ export const CATALOG = {
     title: "Pilates Socks",
     note: "Cheap, Check With Me First",
     link: "https://www.target.com/p/gaiam-studio-select-barre-sock-2pk/-/A-94413600",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Anti-slip_socks.jpg/960px-Anti-slip_socks.jpg",
+    image: "https://images.pexels.com/photos/33360047/pexels-photo-33360047.jpeg?auto=compress&cs=tinysrgb&w=900",
   },
   "Yoga wrap top": {
     title: "Yoga Wrap Top",
