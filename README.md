@@ -16,9 +16,17 @@ npm run build    # production build into dist/
 
 ## How it works
 
-**Pick a profile.** A Netflix-style picker with ten tiles: Dad, Mom, Alexandria,
-Alysia, Alyson, Aleena, Alyla, Alex, Isaiah, Jacob. Choosing one sets who you
-are for the rest of the session (remembered in this browser).
+**Pick a profile.** Ten tiles over a full Christmas scene --- red, green and
+gold, falling snow, swinging gold bells, mistletoe in the corners, and Santa
+flying over a lit-up mall of Amazon, Walmart, Macy's and Shein. It's all CSS
+animation (no GIF files to load), and it holds still for anyone browsing with
+"reduce motion" on. Choosing a tile sets who you are for the rest of the
+session.
+
+**My Profile.** Upload a profile picture and write your *general* gift notes ---
+sizes, colors, allergies, what not to buy. Notes can be written notes, photos or
+links, and they're about how to shop for you, not about any one gift. Everyone
+sees them when they open your list.
 
 **My List.** Add a gift with a title, a link, a photo — any one of them is
 enough. Whatever you leave blank gets filled in (see *The elf* below). Each item

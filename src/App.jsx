@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Layout from './components/Layout.jsx';
 import ProfilePicker from './components/ProfilePicker.jsx';
+import MyProfile from './pages/MyProfile.jsx';
 import MyList from './pages/MyList.jsx';
 import ChristmasWishes from './pages/ChristmasWishes.jsx';
 import SantasWorkshop from './pages/SantasWorkshop.jsx';
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <Layout tab={tab} setTab={setTab}>
+      {tab === 'profile' && <MyProfile />}
       {tab === 'my-list' && <MyList />}
       {tab === 'wishes' && <ChristmasWishes />}
       {tab === 'workshop' && <SantasWorkshop />}

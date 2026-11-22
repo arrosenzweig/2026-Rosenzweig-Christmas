@@ -1,0 +1,288 @@
+/* ===========================================================================
+   "Who's shopping?" --- the Christmas scene and the profile tiles on top of it.
+   Red, green and gold: falling snow, swinging gold bells, mistletoe in the
+   corners, Santa flying over a lit-up shopping mall.
+   =========================================================================== */
+
+.picker {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #2a0a0c;
+}
+
+.picker-inner {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 960px;
+  text-align: center;
+  padding: 6vh 20px 330px;
+}
+
+.picker-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(34px, 7vw, 68px);
+  letter-spacing: 1px;
+  background: linear-gradient(180deg, #fff6d8 0%, #f3c969 45%, #b8860b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35);
+  filter: drop-shadow(0 6px 18px rgba(246, 201, 105, 0.35));
+}
+
+.picker-sub {
+  color: #9fe3b8;
+  margin: 8px 0 34px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  text-shadow: 0 0 14px rgba(46, 158, 107, 0.6);
+}
+
+.picker-grid {
+  list-style: none;
+  padding: 22px 18px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 146px));
+  justify-content: center;
+  max-width: 880px;
+  border-radius: 24px;
+  background: rgba(10, 24, 16, 0.5);
+  border: 1px solid rgba(243, 201, 105, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(3px);
+}
+
+.picker-tile {
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #f6f1e7;
+  transition: transform 0.18s ease;
+}
+.picker-tile:hover,
+.picker-tile:focus-visible { transform: translateY(-6px) scale(1.05); }
+
+.avatar {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(145deg, var(--accent), var(--accent-2));
+  border: 3px solid transparent;
+  line-height: 1;
+  flex: none;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.picker-avatar {
+  border-radius: 20px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(243, 201, 105, 0.5);
+}
+.picker-tile:hover .picker-avatar,
+.picker-tile:focus-visible .picker-avatar {
+  border-color: #f3c969;
+  box-shadow: 0 0 0 4px rgba(243, 201, 105, 0.25), 0 16px 34px rgba(0, 0, 0, 0.55);
+}
+.picker-name { font-size: 17px; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
+.picker-count { font-size: 12px; color: #d8cfae; }
+
+/* ------------------------------------------------------------- the scene -- */
+/* fixed, so the mall and the mistletoe stay framed in the window even
+   when the tiles need scrolling on a short screen */
+.scene { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
+
+.scene-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 420px at 50% 100%, rgba(243, 201, 105, 0.3), transparent 72%),
+    radial-gradient(700px 400px at 12% 8%, rgba(198, 40, 40, 0.55), transparent 70%),
+    radial-gradient(700px 400px at 88% 12%, rgba(21, 94, 60, 0.6), transparent 70%),
+    linear-gradient(180deg, #3b0c12 0%, #230d16 40%, #0c2418 100%);
+}
+
+/* snow */
+.scene-snow { position: absolute; inset: 0; }
+.flake {
+  position: absolute;
+  top: -5vh;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.85;
+  filter: blur(0.3px);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes fall {
+  0% { transform: translate3d(0, -5vh, 0); opacity: 0; }
+  10% { opacity: 0.9; }
+  100% { transform: translate3d(var(--drift), 108vh, 0); opacity: 0.2; }
+}
+
+/* Santa flying across */
+.santa-run {
+  position: absolute;
+  top: 12%;
+  left: -340px;
+  animation: flyAcross 24s linear infinite;
+}
+.santa-bob { display: flex; align-items: center; gap: 0; animation: bob 2.6s ease-in-out infinite; }
+.santa-team { font-size: 34px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+.santa-team:nth-child(2) { margin-left: -6px; }
+.santa-sleigh { font-size: 40px; margin-left: -4px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+.santa-man { font-size: 32px; margin-left: -34px; margin-top: -16px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+.santa-trail {
+  width: 180px;
+  height: 4px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(243, 201, 105, 0.8), transparent);
+  filter: blur(1.5px);
+  transform: scaleX(-1);
+}
+@keyframes flyAcross {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(60vw) translateY(-22px); }
+  100% { transform: translateX(132vw) translateY(10px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-9px) rotate(2deg); }
+}
+
+/* mistletoe in the top corners */
+.mistletoe { position: absolute; top: -10px; width: clamp(130px, 17vw, 210px); }
+.mistletoe.left { left: -12px; transform-origin: 50% 0; }
+.mistletoe.right { right: -12px; transform: scaleX(-1); transform-origin: 50% 0; }
+.mistletoe-swing { transform-origin: 80px 0; animation: sway 6s ease-in-out infinite; }
+@keyframes sway {
+  0%, 100% { transform: rotate(-3.5deg); }
+  50% { transform: rotate(3.5deg); }
+}
+
+/* jingling bells */
+.bell { position: absolute; width: clamp(48px, 6vw, 74px); filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45)); }
+.bell-a { top: -4px; left: clamp(140px, 19vw, 260px); }
+.bell-b { top: -4px; right: clamp(140px, 19vw, 260px); }
+.bell-swing { transform-origin: 40px 16px; animation: jingle 1.1s ease-in-out infinite; }
+.bell-b .bell-swing { animation-delay: -0.55s; }
+@keyframes jingle {
+  0%, 100% { transform: rotate(-11deg); }
+  50% { transform: rotate(11deg); }
+}
+
+/* ---------------------------------------------------------------- mall --- */
+.mall { position: absolute; left: 0; right: 0; bottom: 0; height: 290px; }
+.mall-glow {
+  position: absolute;
+  left: 0; right: 0; bottom: 40px; height: 230px;
+  background: radial-gradient(60% 100% at 50% 100%, rgba(243, 201, 105, 0.35), transparent 70%);
+}
+.mall-row {
+  position: absolute;
+  left: 0; right: 0; bottom: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(6px, 1.4vw, 20px);
+  padding: 0 12px;
+}
+.store {
+  width: clamp(92px, 15vw, 182px);
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(180deg, #16402a 0%, #0b241a 100%);
+  border: 1px solid rgba(243, 201, 105, 0.35);
+  border-bottom: 0;
+  overflow: hidden;
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
+}
+.store-awning {
+  height: 18px;
+  background: repeating-linear-gradient(90deg, #c62828 0 14px, #f6f1e7 14px 28px);
+  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+}
+.store-sign {
+  font-family: Georgia, serif;
+  font-size: clamp(9px, 1.25vw, 15px);
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-align: center;
+  padding: 7px 2px 5px;
+  color: var(--sign);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--sign) 70%, transparent), 0 0 22px color-mix(in srgb, var(--sign) 40%, transparent);
+  animation: signFlicker 7s ease-in-out infinite;
+}
+.store:nth-child(2) .store-sign { animation-delay: -1.7s; }
+.store:nth-child(3) .store-sign { animation-delay: -3.4s; }
+.store:nth-child(4) .store-sign { animation-delay: -5.1s; }
+@keyframes signFlicker {
+  0%, 92%, 100% { opacity: 1; }
+  94% { opacity: 0.55; }
+  96% { opacity: 1; }
+  98% { opacity: 0.7; }
+}
+.store-front {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(5px, 1vw, 12px);
+  padding: 0 8px;
+  height: clamp(44px, 7vw, 76px);
+}
+.store-window {
+  flex: 1;
+  max-width: 44px;
+  height: 70%;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #ffe79a, #e0a63a);
+  box-shadow: 0 0 14px rgba(255, 213, 110, 0.65);
+}
+.store-door { font-size: clamp(16px, 2.4vw, 28px); line-height: 1.1; }
+.mall-ground {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 62px;
+  background: linear-gradient(180deg, #f6f1e7 0%, #d9e3e6 55%, #c4d2d6 100%);
+  box-shadow: 0 -4px 24px rgba(255, 255, 255, 0.3);
+}
+.mall-ground::before {
+  content: '';
+  position: absolute;
+  top: -10px; left: 0; right: 0; height: 22px;
+  background: radial-gradient(14px 10px at 10% 60%, #f6f1e7 70%, transparent 72%),
+              radial-gradient(18px 12px at 32% 70%, #f6f1e7 70%, transparent 72%),
+              radial-gradient(16px 11px at 58% 65%, #f6f1e7 70%, transparent 72%),
+              radial-gradient(20px 12px at 82% 72%, #f6f1e7 70%, transparent 72%);
+}
+
+@media (max-width: 720px) {
+  .picker-inner { padding-bottom: 260px; }
+  .mall { height: 220px; }
+  .mall-row { bottom: 48px; }
+  .bell-a { left: 8px; }
+  .bell-b { right: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flake, .santa-run, .santa-bob, .mistletoe-swing, .bell-swing, .store-sign {
+    animation: none !important;
+  }
+  .santa-run { left: 12vw; }
+}

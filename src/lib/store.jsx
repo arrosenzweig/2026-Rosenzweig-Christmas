@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { SEED_ITEMS } from '../data/seed.js';
+import { SEED_ITEMS, SEED_NOTES } from '../data/seed.js';
 import { placeholderImage } from './images.js';
 import { searchLinkFor } from './searchAgent.js';
 import { profileById } from '../data/profiles.js';
@@ -21,6 +21,13 @@ const SEED_EPOCH = Date.parse('2026-11-01T12:00:00Z');
 function buildSeed() {
   const items = [];
   const claims = {};
+  const profiles = {};
+  for (const [owner, notes] of Object.entries(SEED_NOTES)) {
+    profiles[owner] = {
+      image: '',
+      notes: notes.map((n, i) => ({ ...n, id: `sn-${owner}-${i}`, createdAt: SEED_EPOCH + i })),
+    };
+  }
   SEED_ITEMS.forEach((raw, i) => {
     const id = `seed-${i}`;
     const accent = profileById(raw.owner)?.theme.accent;
@@ -38,7 +45,7 @@ function buildSeed() {
       claims[id] = { by: 'family', status: 'bought', at: SEED_EPOCH + i * 60000 };
     }
   });
-  return { version: 1, items, claims };
+  return { version: 1, items, claims, profiles };
 }
 
 /** Pending claims die after 5 days and the gift goes back on the board. */
@@ -61,7 +68,12 @@ function load() {
     if (!raw) return buildSeed();
     const parsed = JSON.parse(raw);
     if (!parsed || !Array.isArray(parsed.items)) return buildSeed();
-    return { version: 1, items: parsed.items, claims: expireClaims(parsed.claims || {}) };
+    return {
+      version: 1,
+      items: parsed.items,
+      claims: expireClaims(parsed.claims || {}),
+      profiles: parsed.profiles || {},
+    };
   } catch {
     return buildSeed();
   }
@@ -127,12 +139,41 @@ export function StoreProvider({ children }) {
     });
   }, []);
 
+  // ------------------------------------------------ profile image & notes --
+  const setProfileImage = useCallback((owner, image) => {
+    setState((s) => ({
+      ...s,
+      profiles: { ...s.profiles, [owner]: { ...(s.profiles[owner] || { notes: [] }), image } },
+    }));
+  }, []);
+
+  const addNote = useCallback((owner, note) => {
+    setState((s) => {
+      const current = s.profiles[owner] || { image: '', notes: [] };
+      const entry = { ...note, id: `n-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, createdAt: Date.now() };
+      return { ...s, profiles: { ...s.profiles, [owner]: { ...current, notes: [...current.notes, entry] } } };
+    });
+  }, []);
+
+  const deleteNote = useCallback((owner, noteId) => {
+    setState((s) => {
+      const current = s.profiles[owner];
+      if (!current) return s;
+      return {
+        ...s,
+        profiles: { ...s.profiles, [owner]: { ...current, notes: current.notes.filter((n) => n.id !== noteId) } },
+      };
+    });
+  }, []);
+
   const resetEverything = useCallback(() => setState(buildSeed()), []);
 
   const value = useMemo(
     () => ({
       items: state.items,
       claims: state.claims,
+      profiles: state.profiles || {},
+      profileMeta: (id) => (state.profiles || {})[id] || { image: '', notes: [] },
       profileId,
       profile: profileId ? profileById(profileId) : null,
       setProfileId,
@@ -140,9 +181,12 @@ export function StoreProvider({ children }) {
       updateItem,
       deleteItem,
       setClaim,
+      setProfileImage,
+      addNote,
+      deleteNote,
       resetEverything,
     }),
-    [state, profileId, addItem, updateItem, deleteItem, setClaim, resetEverything],
+    [state, profileId, addItem, updateItem, deleteItem, setClaim, setProfileImage, addNote, deleteNote, resetEverything],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

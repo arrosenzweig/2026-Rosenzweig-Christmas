@@ -72,3 +72,26 @@ export const SEED_ITEMS = [
   L('alyla', 'Peachy Babies slime', { priority: 'low' }),
   L('alyla', 'Teeth whitening strips', { priority: 'med', bought: true }),
 ];
+
+// General gift notes --- how someone likes to be shopped for, not specific
+// items. These show at the top of their list under Christmas Wishes.
+export const SEED_NOTES = {
+  alexandria: [
+    { kind: 'text', text: 'Links are for reference \u2014 I don\u2019t need that exact one.' },
+    { kind: 'text', text: 'Size chart: Tops / Dresses / Jackets XS \u00b7 Bottoms S \u00b7 Shoes 7.5' },
+  ],
+  alysia: [
+    { kind: 'text', text: 'Ask me before buying the oddly specific things \u2014 I\u2019m picky about quality.' },
+  ],
+  alyson: [
+    { kind: 'text', text: 'NO store bought sweets.' },
+    { kind: 'text', text: 'My interests: purple (no pink), dragons, dinosaurs, citrus flavors, household appliances.' },
+    { kind: 'text', text: 'Sizes: tops M, skirts L.' },
+  ],
+  aleena: [
+    { kind: 'text', text: 'No monetary gift can replace your time \u2014 plan a sibling date.' },
+  ],
+  alyla: [
+    { kind: 'text', text: 'Sizes: S \u00b7 Shoe 7.5 \u00b7 Bra 34D' },
+  ],
+};

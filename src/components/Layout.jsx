@@ -1,13 +1,15 @@
+import Avatar from './Avatar.jsx';
 import { useStore } from '../lib/store.jsx';
 
 const TABS = [
+  { id: 'profile', label: 'My Profile', icon: '⭐' },
   { id: 'my-list', label: 'My List', icon: '📝' },
   { id: 'wishes', label: 'Christmas Wishes', icon: '✨' },
   { id: 'workshop', label: "Santa's Workshop", icon: '🛠️' },
 ];
 
 export default function Layout({ tab, setTab, children }) {
-  const { profile, setProfileId, claims, profileId } = useStore();
+  const { profile, setProfileId, claims, profileId, profileMeta } = useStore();
   const mine = Object.values(claims).filter((c) => c.by === profileId);
   const pendingCount = mine.filter((c) => c.status === 'pending').length;
 
@@ -23,7 +25,7 @@ export default function Layout({ tab, setTab, children }) {
         </div>
 
         <button className="who" type="button" onClick={() => setProfileId(null)} title="Switch profile">
-          <span className="who-avatar">{profile.emoji}</span>
+          <Avatar profile={profile} image={profileMeta(profileId).image} size={32} className="who-avatar" />
           <span className="who-name">{profile.name}</span>
           <span className="who-switch">switch</span>
         </button>
