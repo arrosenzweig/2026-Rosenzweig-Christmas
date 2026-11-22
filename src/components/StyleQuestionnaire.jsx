@@ -17,6 +17,7 @@ const BLANK = { colors: ['', ''], background: ['', '', ''], special: '' };
 export default function StyleQuestionnaire({ style, onSave }) {
   const [draft, setDraft] = useState({ ...BLANK, ...style });
   const [saved, setSaved] = useState(false);
+  const [cheering, setCheering] = useState(false);
 
   useEffect(() => {
     setDraft({ ...BLANK, ...style });
@@ -55,12 +56,37 @@ export default function StyleQuestionnaire({ style, onSave }) {
       special: (draft.special || '').trim(),
     });
     setSaved(true);
+    // a small burst, because picking your own colours deserves one
+    setCheering(true);
+    setTimeout(() => setCheering(false), 1600);
   }
+
+  const cheerColors = [
+    draft.colors?.[0] || 'var(--accent)',
+    draft.colors?.[1] || 'var(--accent-2)',
+    '#e3a92f',
+    '#12813f',
+  ];
 
   const preview = (draft.background || []).filter(Boolean);
 
   return (
     <form className="quiz" onSubmit={save}>
+      {cheering && (
+        <div className="confetti" aria-hidden="true">
+          {Array.from({ length: 34 }, (_, i) => (
+            <span
+              key={i}
+              style={{
+                left: `${(i * 97) % 100}%`,
+                background: cheerColors[i % cheerColors.length],
+                animationDelay: `${(i % 9) * 0.06}s`,
+                '--sway': `${((i % 7) - 3) * 26}px`,
+              }}
+            />
+          ))}
+        </div>
+      )}
       <div className="quiz-q">
         <h4>1. Pick up to two colours</h4>
         <p>They become the colours of your buttons, headings and highlights.</p>

@@ -14,11 +14,16 @@ export default function Layout({ tab, setTab, children }) {
   const { profile, setProfileId, claims, profileId, profileMeta, status } = useStore();
   const meta = profileMeta(profileId);
   const style = meta.style || {};
+  // a wash of their own colours, but only once they have picked some
+  const hasLook = Boolean(style.colors?.filter(Boolean).length || style.background?.filter(Boolean).length);
   const mine = Object.values(claims).filter((c) => c.by === profileId);
   const pendingCount = mine.filter((c) => c.status === 'pending').length;
 
   return (
-    <div className={`app texture-${profile.theme.texture}`} style={themeVarsFor(profile, meta)}>
+    <div
+      className={`app texture-${profile.theme.texture} ${hasLook ? 'custom-look' : ''}`}
+      style={themeVarsFor(profile, meta)}
+    >
       <ProfileBackdrop items={style.background} special={style.special} />
       <header className="topbar">
         <div className="brand">

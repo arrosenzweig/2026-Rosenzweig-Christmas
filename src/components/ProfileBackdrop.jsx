@@ -1,49 +1,155 @@
+import { useMemo } from 'react';
 import { motifFor } from '../data/motifs.js';
 
-// Fixed spots, spread about so the pattern never looks like a grid.
-const SPOTS = [
-  [6, 12, 1.0], [22, 30, 0.7], [38, 8, 1.2], [54, 26, 0.8], [71, 14, 1.05], [88, 32, 0.75],
-  [12, 52, 0.9], [29, 68, 1.15], [45, 48, 0.7], [62, 64, 1.0], [79, 50, 0.85], [94, 70, 1.1],
-  [4, 84, 0.8], [20, 94, 1.05], [36, 80, 0.95], [52, 92, 0.75], [68, 84, 1.15], [85, 96, 0.9],
+/**
+ * The scene somebody builds for themselves out of three words.
+ *
+ * Each word becomes a whole flock rather than a sprite: things rise like
+ * bubbles, drift across on the breeze, swing in slow orbits, spin in place and
+ * twinkle. They are spread over three depths --- far ones small, faint and
+ * slow, near ones big, bold and quick --- so the page has actual depth to it.
+ * Coloured orbs float behind the lot in whatever colours the person picked, and
+ * their one special something sweeps across on a long curve trailing sparks.
+ *
+ * It is all CSS transforms and opacity, so it stays smooth, it never catches a
+ * click, and it holds completely still for anyone who asked for less motion.
+ */
+
+// A tiny deterministic shuffle, so one person's scene is always THEIR scene ---
+// same words, same layout every time, but different from everybody else's.
+function seedFrom(words) {
+  let h = 2166136261;
+  for (const ch of words.join('|')) {
+    h ^= ch.charCodeAt(0);
+    h = Math.imul(h, 16777619);
+  }
+  return () => {
+    h ^= h << 13;
+    h ^= h >>> 17;
+    h ^= h << 5;
+    return Math.abs(h % 10000) / 10000;
+  };
+}
+
+const MOTIONS = ['rise', 'drift', 'orbit', 'sway', 'spin'];
+
+// far / middle / near --- the three depths of the scene
+const DEPTHS = [
+  { count: 12, size: [16, 28], opacity: 0.28, dur: [26, 44], blur: '1.1px' },
+  { count: 10, size: [30, 48], opacity: 0.38, dur: [17, 29], blur: '0.3px' },
+  { count: 7, size: [52, 86], opacity: 0.46, dur: [11, 19], blur: '0' },
 ];
 
-/**
- * The wallpaper somebody designs for themselves on their profile page: the
- * things they asked for, scattered faintly behind everything, plus their one
- * special element drifting across. Purely decorative --- it never sits on top
- * of anything you need to read or tap.
- */
 export default function ProfileBackdrop({ items = [], special = '' }) {
   const things = items.map((t) => String(t || '').trim()).filter(Boolean);
   const specialText = String(special || '').trim();
-  if (!things.length && !specialText) return null;
 
-  const draw = (word, key, style) => {
-    const emoji = motifFor(word);
-    return (
-      <span key={key} className={`backdrop-item ${emoji ? '' : 'is-word'}`} style={style}>
-        {emoji || word}
-      </span>
-    );
-  };
+  const flock = useMemo(() => {
+    if (!things.length) return [];
+    const rand = seedFrom(things);
+    const out = [];
+    DEPTHS.forEach((depth, d) => {
+      for (let i = 0; i < depth.count; i += 1) {
+        const word = things[(i + d) % things.length];
+        const motion = MOTIONS[Math.floor(rand() * MOTIONS.length)];
+        out.push({
+          key: `${d}-${i}`,
+          word,
+          motion,
+          left: Math.round(rand() * 96),
+          top: Math.round(rand() * 92),
+          size: Math.round(depth.size[0] + rand() * (depth.size[1] - depth.size[0])),
+          opacity: depth.opacity,
+          blur: depth.blur,
+          duration: Math.round(depth.dur[0] + rand() * (depth.dur[1] - depth.dur[0])),
+          delay: -Math.round(rand() * 24),
+          swing: Math.round(14 + rand() * 46), // how far it wanders
+          tilt: Math.round(-18 + rand() * 36),
+        });
+      }
+    });
+    return out;
+  }, [things.join('|')]);
+
+  // coloured orbs that breathe behind everything
+  const orbs = useMemo(
+    () =>
+      [
+        { left: 6, top: 14, size: 34, dur: 23, delay: 0, tone: 'var(--accent)' },
+        { left: 74, top: 8, size: 26, dur: 31, delay: -8, tone: 'var(--accent-2)' },
+        { left: 38, top: 62, size: 40, dur: 27, delay: -15, tone: 'var(--accent)' },
+        { left: 86, top: 70, size: 22, dur: 19, delay: -4, tone: 'var(--accent-2)' },
+      ],
+    [],
+  );
+
+  if (!things.length && !specialText) return null;
 
   const specialEmoji = motifFor(specialText);
 
   return (
     <div className="backdrop" aria-hidden="true">
-      {things.length > 0 &&
-        SPOTS.map(([left, top, scale], i) =>
-          draw(things[i % things.length], i, {
-            left: `${left}%`,
-            top: `${top}%`,
-            '--scale': scale,
-            animationDelay: `${-(i % 7) * 1.3}s`,
-          }),
-        )}
+      {things.length > 0 && (
+        <>
+          {orbs.map((o, i) => (
+            <span
+              key={`orb-${i}`}
+              className="backdrop-orb"
+              style={{
+                left: `${o.left}%`,
+                top: `${o.top}%`,
+                '--orb': `${o.size}vmin`,
+                '--tone': o.tone,
+                animationDuration: `${o.dur}s`,
+                animationDelay: `${o.delay}s`,
+              }}
+            />
+          ))}
+
+          {flock.map((f) => {
+            const emoji = motifFor(f.word);
+            return (
+              <span
+                key={f.key}
+                className={`backdrop-item is-${f.motion} ${emoji ? '' : 'is-word'}`}
+                style={{
+                  left: `${f.left}%`,
+                  top: `${f.top}%`,
+                  fontSize: `${f.size}px`,
+                  opacity: f.opacity,
+                  filter: f.blur === '0' ? undefined : `blur(${f.blur})`,
+                  animationDuration: `${f.duration}s`,
+                  animationDelay: `${f.delay}s`,
+                  '--swing': `${f.swing}px`,
+                  '--tilt': `${f.tilt}deg`,
+                }}
+              >
+                {emoji || f.word}
+              </span>
+            );
+          })}
+
+          {/* a handful of twinkles to make the whole thing shimmer */}
+          {[18, 42, 61, 79, 93, 30].map((left, i) => (
+            <span
+              key={`tw-${i}`}
+              className="backdrop-twinkle"
+              style={{
+                left: `${left}%`,
+                top: `${(i * 37) % 90}%`,
+                animationDelay: `${-i * 1.4}s`,
+              }}
+            />
+          ))}
+        </>
+      )}
 
       {specialText && (
-        <span className={`backdrop-special ${specialEmoji ? '' : 'is-word'}`}>
-          {specialEmoji || specialText}
+        <span className="backdrop-flight">
+          <span className={`backdrop-special ${specialEmoji ? '' : 'is-word'}`}>
+            {specialEmoji || specialText}
+            <span className="backdrop-trail" />
+          </span>
         </span>
       )}
     </div>

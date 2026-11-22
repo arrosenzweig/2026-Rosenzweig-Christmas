@@ -114,18 +114,31 @@ placeholder rather than showing a broken image.
 
 ## Make this page yours
 
-At the foot of **My Profile** there is a short questionnaire that restyles *your
-own view* of the site and nobody else's:
+At the foot of **My Profile** there is a short questionnaire that rebuilds
+*your own view* of the site and nobody else's:
 
-1. **Up to two colours** --- they become your buttons, headings and highlights.
-2. **Three things for your background** --- typed in plain words. Recognised
-   words ("dragons", "matcha", "snowflakes") turn into pictures scattered faintly
-   behind the page; anything else is written out in your own words instead.
-3. **One special something** --- a single element that drifts slowly across.
+1. **Up to two colours.** They become your buttons, headings and highlights ---
+   and the whole page: a wash of those colours across the background, a slow
+   aurora drifting over it, your header repainted in them, and every card turned
+   to frosted glass so the scene behind keeps showing through.
+2. **Three things for your background.** Each word becomes a whole flock, not a
+   sprite: things rise like bubbles, drift across on the breeze, swing in slow
+   orbits, sway and spin. They are spread over three depths --- far ones small,
+   faint and slow; near ones big, bold and quick --- so the page has real depth.
+   Recognised words become pictures; anything else is written out in your own
+   words and drifts just the same.
+3. **One special something.** It sweeps across the page on a long curve,
+   trailing sparks, over and over.
 
-None of it touches anyone's list, and none of it changes what other people see.
-"Back to default" puts your profile's own colours back. The word-to-picture
-list lives in `src/data/motifs.js`, so it is easy to teach it new words.
+Coloured orbs breathe behind the lot and twinkles shimmer through it. The layout
+is seeded from your own words, so your scene is always yours --- same words,
+same scene, different from everybody else's. Saving sets off confetti in your
+colours.
+
+It is all CSS transforms and opacity: nothing takes a click, nothing touches
+anyone's list, nobody else sees it, and it all holds still for anyone browsing
+with "reduce motion" on. "Back to default" puts everything back. The
+word-to-picture list lives in `src/data/motifs.js`.
 
 ## Styling
 
