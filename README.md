@@ -80,6 +80,21 @@ Whatever stage answers, names come out Title Cased and trailing asides are split
 into a short note underneath: "Kendra Scott earrings --- opal please" becomes
 **Kendra Scott Earrings** with *Opal* as its subtitle.
 
+### Refresh AI photo
+
+Every gift on your own list has a **Refresh AI photo** button above **Change
+photo**. Pressing it sends the elf out there and then to look for another
+picture of whatever the gift is called, through two open libraries that need no
+account and answer straight from the browser: **Openverse** (Creative Commons
+photos, where everyday objects actually live) and **Wikimedia Commons** as a
+fallback. Press it again and you get a different one --- each press works
+further down the results.
+
+Because the search uses the gift's own name, a gift nobody put a brand on gets a
+plain photo of the thing: the brand rule holds by construction. These are real
+photographs off the internet, so quality varies --- press again, or upload your
+own, which replaces it and takes the AI label off.
+
 ### The brand rule
 
 A brand only ever appears in a gift's picture or its name when the person asked

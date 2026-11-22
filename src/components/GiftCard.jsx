@@ -1,9 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Editable from './Editable.jsx';
 import Stockings from './Stockings.jsx';
 import { profileById } from '../data/profiles.js';
 import { formatLeft, msLeft } from '../lib/store.jsx';
 import { fileToResizedDataUrl, placeholderImage } from '../lib/images.js';
+import { findPhoto } from '../lib/searchAgent.js';
 
 /**
  * One gift.
@@ -26,6 +27,27 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
   // owner has ticked the photo off as a good likeness
   const showCredit = foundByAgent && !hidden && (editable || !item.imageApproved);
   const photoRef = useRef(null);
+  const attempt = useRef(0);
+  const [finding, setFinding] = useState('');
+
+  /** Send the elf out for a different picture of this gift. */
+  async function refreshPhoto() {
+    setFinding('looking');
+    try {
+      attempt.current += 1;
+      const found = await findPhoto(item.title, attempt.current);
+      if (found) {
+        onEdit(item.id, { image: found.image, imageBy: 'agent', imageApproved: false });
+        setFinding('');
+      } else {
+        setFinding('none');
+        setTimeout(() => setFinding(''), 2500);
+      }
+    } catch {
+      setFinding('none');
+      setTimeout(() => setFinding(''), 2500);
+    }
+  }
 
   async function onPickPhoto(e) {
     const file = e.target.files?.[0];
@@ -70,6 +92,17 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
 
         {editable && (
           <>
+            <button
+              className="photo-refresh"
+              type="button"
+              onClick={refreshPhoto}
+              disabled={finding === 'looking'}
+              title="Have the elf look online for another photo of this gift"
+            >
+              {finding === 'looking' && '🔎 Looking…'}
+              {finding === 'none' && '🤷 Nothing found'}
+              {!finding && '🔄 Refresh AI photo'}
+            </button>
             <button className="photo-edit" type="button" onClick={() => photoRef.current?.click()} title="Click to change the photo">
               🖼️ <span className="photo-edit-label">Change photo</span>
             </button>

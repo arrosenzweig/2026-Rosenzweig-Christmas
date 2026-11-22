@@ -485,6 +485,7 @@ p.editable { margin: 0; }
 }
 .gift-link-open:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 
+.photo-refresh,
 .photo-edit {
   position: absolute;
   left: 50%;
@@ -504,11 +505,16 @@ p.editable { margin: 0; }
   box-shadow: 0 4px 12px rgba(43, 21, 18, 0.2);
 }
 .gift-card.is-editable:hover .photo-edit,
-.photo-edit:focus-visible {
+.gift-card.is-editable:hover .photo-refresh,
+.photo-edit:focus-visible,
+.photo-refresh:focus-visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
 }
+/* sits just above "Change photo" */
+.photo-refresh { bottom: 40px; }
+.photo-refresh:disabled { cursor: progress; opacity: 0.9; }
 
 /* where the board is saved --- shown in the footer */
 .board-state { display: inline-flex; align-items: center; gap: 6px; }
@@ -838,17 +844,18 @@ p.editable { margin: 0; }
    there all the time instead. */
 @media (hover: none) {
   /* a small tucked-away button rather than a pill across the picture */
-  .photo-edit {
+  .photo-edit, .photo-refresh {
     opacity: 1;
     pointer-events: auto;
     left: auto;
     right: 6px;
-    bottom: 6px;
     transform: none;
     font-size: 13px;
     padding: 3px 7px;
     background: rgba(255, 255, 255, 0.92);
   }
+  .photo-edit { bottom: 6px; }
+  .photo-refresh { bottom: 34px; font-size: 10px; }
   .photo-edit .photo-edit-label { display: none; }
   /* a pencil is enough of a hint --- outlining every field is too noisy */
   .gift-card.is-editable .editable::after {

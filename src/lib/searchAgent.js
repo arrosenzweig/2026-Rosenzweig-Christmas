@@ -180,3 +180,89 @@ export async function enrich(draft, accent) {
     foundBy: given.image ? 'link' : 'offline',
   };
 }
+
+// --------------------------------------------------------- finding photos --
+//
+// "Refresh AI photo" on a card sends the elf out to look for a different
+// picture of whatever the gift is called. Two open libraries answer without a
+// key and allow being called from a browser:
+//
+//   Openverse          --- Creative Commons photos from Flickr and friends,
+//                          which is where everyday objects actually live
+//   Wikimedia Commons  --- the fallback, more encyclopedic than catalogue
+//
+// Both are searched by the gift's own name, so a gift nobody put a brand on
+// gets a plain photo of the thing --- the brand rule holds by construction.
+// Each press moves further down the results, so pressing again gives you a
+// different picture rather than the same one.
+
+const OPENVERSE = 'https://api.openverse.org/v1/images/';
+const COMMONS = 'https://commons.wikimedia.org/w/api.php';
+
+async function fromOpenverse(title, attempt) {
+  const perPage = 4;
+  const page = 1 + Math.floor(attempt / perPage);
+  const url = `${OPENVERSE}?q=${encodeURIComponent(title)}&page_size=${perPage}&page=${page}`;
+  const res = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!res.ok) return null;
+  const body = await res.json();
+  const hit = body.results?.[attempt % perPage];
+  if (!hit) return null;
+  // the provider's own file loads straight away; Openverse's thumbnail service
+  // has to generate one first, which can take several seconds
+  const direct = hit.url || '';
+  const image = /\.(jpe?g|png|webp|gif)(\?|$)/i.test(direct) ? direct : hit.thumbnail || direct;
+  return {
+    image,
+    link: hit.foreign_landing_url || direct,
+    from: 'Openverse',
+  };
+}
+
+async function fromCommons(title, attempt) {
+  const params = new URLSearchParams({
+    action: 'query',
+    generator: 'search',
+    gsrnamespace: '6', // files only
+    gsrsearch: `filetype:bitmap ${title}`,
+    gsrlimit: '1',
+    gsroffset: String(attempt),
+    prop: 'imageinfo',
+    iiprop: 'url',
+    iiurlwidth: '900',
+    format: 'json',
+    origin: '*',
+  });
+  const res = await fetch(`${COMMONS}?${params}`);
+  if (!res.ok) return null;
+  const body = await res.json();
+  const page = Object.values(body.query?.pages || {})[0];
+  const info = page?.imageinfo?.[0];
+  if (!info) return null;
+  return {
+    image: info.thumburl || info.url,
+    link: `https://commons.wikimedia.org/wiki/${encodeURIComponent(page.title)}`,
+    from: 'Wikimedia Commons',
+  };
+}
+
+/**
+ * Go and find another photo of this gift.
+ * @param {string} title  what the gift is called
+ * @param {number} attempt  0 for the first look, 1 for the next, and so on
+ * @returns {Promise<{image, link, from}|null>}
+ */
+export async function findPhoto(title, attempt = 0) {
+  const name = String(title || '').trim();
+  if (!name) return null;
+
+  for (const look of [fromOpenverse, fromCommons]) {
+    try {
+      const found = await look(name, attempt);
+      if (found?.image) return found;
+    } catch {
+      // try the next library
+    }
+  }
+  return null;
+}
