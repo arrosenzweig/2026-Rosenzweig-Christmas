@@ -5,7 +5,7 @@ import ProfileNotes from '../components/ProfileNotes.jsx';
 import StyleQuestionnaire from '../components/StyleQuestionnaire.jsx';
 import { EMOJI_GROUPS } from '../data/emojis.js';
 import { useStore } from '../lib/store.jsx';
-import { fileToDataUrl, fileToResizedDataUrl } from '../lib/images.js';
+import { fileToCropSource, fileToResizedDataUrl } from '../lib/images.js';
 
 const KINDS = [
   { id: 'text', label: '📝 Note' },
@@ -32,7 +32,7 @@ export default function MyProfile() {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      setCropping(await fileToDataUrl(file));
+      setCropping(await fileToCropSource(file));
       setError('');
     } catch (err) {
       setError(err.message);
@@ -89,6 +89,7 @@ export default function MyProfile() {
             <button className="btn" type="button" onClick={() => avatarRef.current?.click()}>
               {meta.image ? 'Change picture' : 'Upload a picture'}
             </button>
+            <span className="profile-avatar-hint">You can crop and turn it in the next step.</span>
             {meta.image && (
               <>
                 <button className="btn" type="button" onClick={() => setCropping(meta.image)}>

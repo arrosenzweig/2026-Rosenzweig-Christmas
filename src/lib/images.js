@@ -124,3 +124,51 @@ export function fileToDataUrl(file) {
     reader.readAsDataURL(file);
   });
 }
+
+/**
+ * Get a photo ready for the cropper.
+ *
+ * Phones hand over enormous files --- a 12 megapixel JPEG, or on an iPhone a
+ * HEIC that most browsers cannot open at all. So decode it first, say something
+ * useful if that fails, and shrink it before it ever reaches the cropper: the
+ * crop is far smoother, and a phone is much less likely to run out of memory.
+ */
+export async function fileToCropSource(file, maxEdge = 1800) {
+  if (!file.type?.startsWith('image/')) {
+    throw new Error('That file is not a photo. Pick a JPEG or PNG.');
+  }
+
+  let bitmap;
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch {
+    // Safari/iOS and HEIC: fall back to the old way before giving up
+    try {
+      const url = URL.createObjectURL(file);
+      bitmap = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('decode failed'));
+        img.src = url;
+      });
+    } catch {
+      throw new Error(
+        'This browser cannot open that photo. iPhones save as HEIC by default — ' +
+          'try Settings ▸ Camera ▸ Formats ▸ Most Compatible, or send the photo to yourself first, ' +
+          'which turns it into a JPEG.',
+      );
+    }
+  }
+
+  const w = bitmap.width;
+  const h = bitmap.height;
+  const scale = Math.min(1, maxEdge / Math.max(w, h));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(w * scale);
+  canvas.height = Math.round(h * scale);
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close?.();
+  return canvas.toDataURL('image/jpeg', 0.92);
+}
