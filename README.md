@@ -31,9 +31,12 @@ sees them when they open your list.
 
 **My List.** Add a gift with a title, a link, a photo — any one of them is
 enough. Whatever you leave blank gets filled in (see *The elf* below). Each item
-shows its photo, its title (hyperlinked when there's a link), its notes, and a
-priority of three stockings: grey by default, 1 / 2 / 3 lit for Low / Medium /
-High. Click the stockings to change the priority at any time. The small **×** in
+shows its photo, its title, its note, and a priority of three stockings: grey by
+default, 1 / 2 / 3 lit for Low / Medium / High.
+
+Once a gift is on your list, **click any part of its card to change it** — the
+photo, the title, the note, the link, the priority. Hovering shows you what can
+be edited; Enter or clicking away saves, Escape puts it back. The small **×** in
 the corner removes the item. Sort by A→Z, newest added, or highest priority.
 
 **Christmas Wishes.** Pick one person — one at a time — and you get their page:
@@ -93,16 +96,35 @@ at the top of `src/styles.css`.
 
 ## Where the data lives
 
-Everything is in the browser's `localStorage` (`src/lib/store.jsx`). That means
-**each device currently has its own copy of the lists** — fine for trying it
-out, not yet for the whole family sharing one board. Swapping the `load` /
-`persist` pair for calls to a small shared API (Firebase, Supabase, or a tiny
-server) is the one change needed to make it shared; everything else in the app
-already works off that single store.
+Everything anyone adds, edits, claims or deletes is written to a **Firebase
+Realtime Database** over its plain REST API as it happens, and every open tab
+picks up everyone else's changes within about five seconds. The data lives in
+the database, not in the site, so the site can be rebuilt and redeployed as
+often as you like without touching anybody's list. `localStorage` is only a
+cache, so a tab paints instantly and keeps working if the network blips.
 
-Lists are seeded from *2026 Christmas Lists.docx* — Alexandria, Alysia, Alyson,
-Aleena and Alyla's items, with the ones already marked BOUGHT in the doc coming
-in pre-claimed. Dad, Mom, Alex, Isaiah and Jacob start empty.
+### Turning the shared board on (one time, about two minutes)
+
+1. [console.firebase.google.com](https://console.firebase.google.com) → **Add
+   project** (any name, Analytics off).
+2. **Build → Realtime Database → Create Database → Start in test mode.**
+3. Copy the database URL it shows you, e.g.
+   `https://rosenzweig-christmas-default-rtdb.firebaseio.com`
+4. Paste it as `FIREBASE_DB` at the top of [`src/lib/remote.js`](src/lib/remote.js)
+   (or set `VITE_FIREBASE_DB` at build time) and push.
+
+Nobody else needs an account or a login — opening the site is enough. Test mode
+leaves the database open to anyone who knows the URL, which is the trade for
+that; Firebase emails before test mode expires, and the simplest fix is to open
+**Rules** and set `.read` and `.write` to `true`.
+
+The footer always says which mode you are in: *Shared board*, *Saved in this
+browser only*, or *Can't reach the shared board*. Until a URL is set it is the
+middle one — the site works, but each browser keeps its own copy.
+
+When new photos or cleaner names ship in the catalog, boards already in use pick
+them up automatically — except on gifts someone has edited by hand, which are
+left alone.
 
 ## Deploying
 

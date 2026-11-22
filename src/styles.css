@@ -397,3 +397,96 @@ a.gift-title:hover { color: var(--accent-2); text-decoration: underline; }
   .shop-thumb { width: 56px; height: 56px; }
   .shop-side { grid-column: 1 / -1; align-items: flex-start; text-align: left; }
 }
+
+/* ------------------------------------------------- click-to-edit cards --- */
+/* On your own list every part of a card is editable: hovering shows what can
+   be clicked, clicking opens the field in place. */
+.editable {
+  cursor: text;
+  border-radius: 7px;
+  outline: 2px dashed transparent;
+  outline-offset: 3px;
+  transition: outline-color 0.14s ease, background 0.14s ease;
+}
+.gift-card.is-editable .editable:hover,
+.editable:focus-visible {
+  outline-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+.gift-card.is-editable .editable:hover::after,
+.editable:focus-visible::after {
+  content: ' ✎';
+  font-size: 0.8em;
+  color: var(--accent);
+}
+.editable.is-empty {
+  color: var(--ink-dim);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+}
+.editable-input {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: #fffdf9;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 5px 8px;
+  resize: vertical;
+}
+.editable-input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+
+p.editable { margin: 0; }
+
+.gift-link-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.gift-link {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--ink-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gift-link-open {
+  text-decoration: none;
+  font-size: 13px;
+  color: var(--accent-2);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 0 7px;
+  line-height: 1.5;
+}
+.gift-link-open:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+.photo-edit {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--accent);
+  color: var(--accent-2);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(43, 21, 18, 0.2);
+}
+.gift-card.is-editable:hover .photo-edit,
+.photo-edit:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* where the board is saved --- shown in the footer */
+.board-state { display: inline-flex; align-items: center; gap: 6px; }
+.board-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.board-state.local .board-dot { background: var(--gold); }
+.board-state.offline .board-dot { background: var(--red); }

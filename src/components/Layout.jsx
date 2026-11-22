@@ -10,7 +10,7 @@ const TABS = [
 ];
 
 export default function Layout({ tab, setTab, children }) {
-  const { profile, setProfileId, claims, profileId, profileMeta } = useStore();
+  const { profile, setProfileId, claims, profileId, profileMeta, status } = useStore();
   const mine = Object.values(claims).filter((c) => c.by === profileId);
   const pendingCount = mine.filter((c) => c.status === 'pending').length;
 
@@ -43,7 +43,17 @@ export default function Layout({ tab, setTab, children }) {
 
       <main className="main">{children}</main>
 
-      <footer className="foot">Made with candy canes and good intentions 🍬</footer>
+      <footer className="foot">
+        Made with candy canes and good intentions 🍬
+        {' · '}
+        <span className={`board-state ${status}`}>
+          <span className="board-dot" aria-hidden="true" />
+          {status === 'shared' && 'Shared board — everyone sees your changes'}
+          {status === 'connecting' && 'Connecting to the shared board…'}
+          {status === 'offline' && "Can't reach the shared board — changes are saved here for now"}
+          {status === 'local' && 'Saved in this browser only'}
+        </span>
+      </footer>
     </div>
   );
 }

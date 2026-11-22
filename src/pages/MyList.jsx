@@ -66,6 +66,7 @@ export default function MyList() {
       <h2 className="page-title">My List</h2>
       <p className="page-sub">
         Add a title, a link, a photo — or all three. Whatever you leave blank, the elf fills in for you.
+        Once it is on your list, click any part of a card to change it.
       </p>
 
       <form className="add-card" onSubmit={onSubmit}>
@@ -133,6 +134,8 @@ export default function MyList() {
               variant="own"
               onDelete={deleteItem}
               onPriority={(id, priority) => updateItem(id, { priority })}
+              // an edit here is yours --- it stops the catalog overwriting the gift later
+              onEdit={(id, patch) => updateItem(id, { ...patch, edited: true })}
             />
           ))}
         </div>
