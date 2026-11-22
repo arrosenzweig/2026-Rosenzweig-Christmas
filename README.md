@@ -16,12 +16,13 @@ npm run build    # production build into dist/
 
 ## How it works
 
-**Pick a profile.** Ten tiles over a full Christmas scene --- red, green and
-gold, falling snow, swinging gold bells, mistletoe in the corners, and Santa
-flying over a lit-up mall of Amazon, Walmart, Macy's and Shein. It's all CSS
-animation (no GIF files to load), and it holds still for anyone browsing with
-"reduce motion" on. Choosing a tile sets who you are for the rest of the
-session.
+**Pick a profile.** Ten tiles over a Christmas night scene --- red, green and
+gold, falling snow, swinging gold bells, mistletoe in the corners, Santa and a
+team of eight reindeer crossing the sky with a trail of stars, and elves
+hammering away at their workbenches along the bottom. It is all CSS and SVG, so
+there is nothing to download, it stays sharp at any size, and it holds still for
+anyone browsing with "reduce motion" on. Choosing a tile sets who you are for
+the rest of the session.
 
 **My Profile.** Upload a profile picture and write your *general* gift notes ---
 sizes, colors, allergies, what not to buy. Notes can be written notes, photos or
@@ -56,16 +57,39 @@ before the hold lapses, and turn red in the last day.
 
 ## The elf (auto-fill agent)
 
-`src/lib/searchAgent.js` fills in whatever an item is missing. It runs in two
-modes:
+`src/lib/searchAgent.js` fills in whatever an item is missing, in three stages,
+stopping as soon as the item is complete:
 
-- **Offline (default, no setup).** The title is read out of the link, a shopping
-  search link is built from the title, and a wrapped-present placeholder card
-  with the title on it stands in for a missing photo.
-- **Live search.** Set `VITE_ENRICH_API` to an HTTPS endpoint that accepts
-  `POST {title, link, image}` and answers `{title, link, image}`. That endpoint
-  is where a real web search / model call belongs — it needs an API key, which
-  can't live in the browser. The front end needs no other change.
+1. **Your own search endpoint.** Set `VITE_ENRICH_API` to an HTTPS endpoint that
+   accepts `POST {title, link, image}` and answers `{title, link, image}`. This
+   is the only stage that can search the web from a description, because that
+   needs an API key and a key cannot live in a browser.
+2. **Link lookup** (no key, works today). Paste a link and the page's own real
+   title and product photo are fetched through Microlink's free public API.
+3. **Offline filler.** A shopping-search link built from the title, and a
+   wrapped-present card with the title written on it.
+
+Whatever stage answers, names come out Title Cased and trailing asides are split
+into a short note: "Kendra Scott earrings --- opal please" becomes
+**Kendra Scott Earrings** with *Preference: Opal* underneath.
+
+### The catalog
+
+All 50 items from the list document were looked up ahead of time by web-search
+agents and live in `src/data/catalog.js` --- clean name, preference note, real
+product page, real product photo from the shop's own CDN. It is keyed by the
+document's original wording, so redoing that research only touches that one
+file. If a shop ever stops serving a photo, the card falls back to the drawn
+placeholder rather than showing a broken image.
+
+## Styling
+
+`src/data/profiles.js` is the whole look of the signed-in site. Each person
+carries two accent colors, a background texture, a heading font, how round their
+cards are, and a motif that sits beside their page titles; everything else reads
+those through CSS variables. Restyling someone is an edit to that file alone.
+The base palette --- cream paper, candy-cane red, fir green, gold trim --- lives
+at the top of `src/styles.css`.
 
 ## Where the data lives
 
