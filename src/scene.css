@@ -1,7 +1,7 @@
 /* ===========================================================================
    "Who's shopping?" --- the Christmas scene and the profile tiles on top of it.
    Red, green and gold: falling snow, swinging gold bells, mistletoe in the
-   corners, Santa flying over a lit-up shopping mall.
+   corners, Santa flying over, and elves at their workbenches below.
    =========================================================================== */
 
 .picker {
@@ -102,7 +102,7 @@
 .picker-count { font-size: 12px; color: #d8cfae; }
 
 /* ------------------------------------------------------------- the scene -- */
-/* fixed, so the mall and the mistletoe stay framed in the window even
+/* fixed, so the workshop and the mistletoe stay framed in the window even
    when the tiles need scrolling on a short screen */
 .scene { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
 
@@ -136,35 +136,36 @@
   100% { transform: translate3d(var(--drift), 108vh, 0); opacity: 0.2; }
 }
 
-/* Santa flying across */
+/* Santa and the team flying across */
 .santa-run {
   position: absolute;
-  top: 12%;
-  left: -340px;
-  animation: flyAcross 24s linear infinite;
+  top: 7%;
+  left: -34vw;
+  width: clamp(300px, 42vw, 620px);
+  animation: flyAcross 26s linear infinite;
 }
-.santa-bob { display: flex; align-items: center; gap: 0; animation: bob 2.6s ease-in-out infinite; }
-.santa-team { font-size: 34px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
-.santa-team:nth-child(2) { margin-left: -6px; }
-.santa-sleigh { font-size: 40px; margin-left: -4px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
-.santa-man { font-size: 32px; margin-left: -34px; margin-top: -16px; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
-.santa-trail {
-  width: 180px;
-  height: 4px;
-  margin-left: 4px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(243, 201, 105, 0.8), transparent);
-  filter: blur(1.5px);
-  transform: scaleX(-1);
+.santa-bob { animation: bob 3s ease-in-out infinite; }
+.santa-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: #f2f1ff;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
+}
+.deer-b { transform-box: fill-box; }
+.twinkle { animation: twinkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
 }
 @keyframes flyAcross {
   0% { transform: translateX(0) translateY(0); }
-  50% { transform: translateX(60vw) translateY(-22px); }
-  100% { transform: translateX(132vw) translateY(10px); }
+  50% { transform: translateX(72vw) translateY(-26px); }
+  100% { transform: translateX(146vw) translateY(14px); }
 }
 @keyframes bob {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-9px) rotate(2deg); }
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50% { transform: translateY(-10px) rotate(1.2deg); }
 }
 
 /* mistletoe in the top corners */
@@ -188,100 +189,121 @@
   50% { transform: rotate(11deg); }
 }
 
-/* ---------------------------------------------------------------- mall --- */
-.mall { position: absolute; left: 0; right: 0; bottom: 0; height: 290px; }
-.mall-glow {
+/* ----------------------------------------------- santa's workshop below --- */
+.workshop { position: absolute; left: 0; right: 0; bottom: 0; height: 270px; }
+.workshop-glow {
   position: absolute;
   left: 0; right: 0; bottom: 40px; height: 230px;
-  background: radial-gradient(60% 100% at 50% 100%, rgba(243, 201, 105, 0.35), transparent 70%);
+  background: radial-gradient(58% 100% at 50% 100%, rgba(243, 201, 105, 0.32), transparent 70%);
 }
-.mall-row {
+.workshop-row {
   position: absolute;
-  left: 0; right: 0; bottom: 58px;
+  left: 0; right: 0; bottom: 54px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: clamp(6px, 1.4vw, 20px);
-  padding: 0 12px;
+  gap: clamp(4px, 2.4vw, 46px);
+  padding: 0 10px;
 }
-.store {
-  width: clamp(92px, 15vw, 182px);
-  border-radius: 10px 10px 0 0;
-  background: linear-gradient(180deg, #16402a 0%, #0b241a 100%);
-  border: 1px solid rgba(243, 201, 105, 0.35);
-  border-bottom: 0;
-  overflow: hidden;
-  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
+.elf-station { display: flex; flex-direction: column; align-items: center; }
+.elf-wrap { position: relative; display: flex; align-items: flex-end; }
+
+.elf {
+  font-size: clamp(26px, 4.2vw, 50px);
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  animation: elfBob 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--n) * -0.23s);
 }
-.store-awning {
-  height: 18px;
-  background: repeating-linear-gradient(90deg, #c62828 0 14px, #f6f1e7 14px 28px);
-  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+.elf-tool {
+  font-size: clamp(14px, 2.4vw, 28px);
+  line-height: 1;
+  margin-left: -6px;
+  transform-origin: 20% 90%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  animation: elfTap 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--n) * -0.23s);
 }
-.store-sign {
-  font-family: Georgia, serif;
-  font-size: clamp(9px, 1.25vw, 15px);
-  letter-spacing: 2px;
-  font-weight: 700;
-  text-align: center;
-  padding: 7px 2px 5px;
-  color: var(--sign);
-  text-shadow: 0 0 10px color-mix(in srgb, var(--sign) 70%, transparent), 0 0 22px color-mix(in srgb, var(--sign) 40%, transparent);
-  animation: signFlicker 7s ease-in-out infinite;
-}
-.store:nth-child(2) .store-sign { animation-delay: -1.7s; }
-.store:nth-child(3) .store-sign { animation-delay: -3.4s; }
-.store:nth-child(4) .store-sign { animation-delay: -5.1s; }
-@keyframes signFlicker {
-  0%, 92%, 100% { opacity: 1; }
-  94% { opacity: 0.55; }
-  96% { opacity: 1; }
-  98% { opacity: 0.7; }
-}
-.store-front {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(5px, 1vw, 12px);
-  padding: 0 8px;
-  height: clamp(44px, 7vw, 76px);
-}
-.store-window {
-  flex: 1;
-  max-width: 44px;
-  height: 70%;
-  border-radius: 4px 4px 0 0;
-  background: linear-gradient(180deg, #ffe79a, #e0a63a);
-  box-shadow: 0 0 14px rgba(255, 213, 110, 0.65);
-}
-.store-door { font-size: clamp(16px, 2.4vw, 28px); line-height: 1.1; }
-.mall-ground {
+.elf-sparks {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 62px;
-  background: linear-gradient(180deg, #f6f1e7 0%, #d9e3e6 55%, #c4d2d6 100%);
-  box-shadow: 0 -4px 24px rgba(255, 255, 255, 0.3);
+  right: -4px;
+  top: 28%;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #ffe79a;
+  box-shadow: 0 0 10px #ffd86b;
+  opacity: 0;
+  animation: spark 1.4s ease-out infinite;
+  animation-delay: calc(var(--n) * -0.23s + 0.3s);
 }
-.mall-ground::before {
+
+.bench {
+  position: relative;
+  width: clamp(78px, 13vw, 162px);
+  height: 14px;
+  margin-top: -4px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #c08a44 0%, #7a4f22 100%);
+  border: 1px solid #5b3a18;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+}
+.bench::before, .bench::after {
   content: '';
   position: absolute;
-  top: -10px; left: 0; right: 0; height: 22px;
-  background: radial-gradient(14px 10px at 10% 60%, #f6f1e7 70%, transparent 72%),
-              radial-gradient(18px 12px at 32% 70%, #f6f1e7 70%, transparent 72%),
-              radial-gradient(16px 11px at 58% 65%, #f6f1e7 70%, transparent 72%),
-              radial-gradient(20px 12px at 82% 72%, #f6f1e7 70%, transparent 72%);
+  top: 100%;
+  width: 7px;
+  height: clamp(16px, 2.6vw, 32px);
+  background: linear-gradient(180deg, #8a5b28, #5b3a18);
+}
+.bench::before { left: 9px; }
+.bench::after { right: 9px; }
+
+.bench-toys {
+  position: absolute;
+  bottom: 100%;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 7px 2px;
+}
+.toy {
+  font-size: clamp(13px, 1.9vw, 22px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+  animation: toyPop 3.2s ease-in-out infinite;
+  animation-delay: calc((var(--n) + var(--t)) * -0.4s);
+}
+
+@keyframes elfBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes elfTap {
+  0%, 55%, 100% { transform: rotate(-8deg); }
+  72% { transform: rotate(28deg); }
+}
+@keyframes spark {
+  0%, 62% { opacity: 0; transform: scale(0.4); }
+  72% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translate(7px, -12px) scale(0.3); }
+}
+@keyframes toyPop {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
 }
 
 @media (max-width: 720px) {
-  .picker-inner { padding-bottom: 260px; }
-  .mall { height: 220px; }
-  .mall-row { bottom: 48px; }
+  .picker-inner { padding-bottom: 250px; }
+  .workshop { height: 210px; }
+  .workshop-row { bottom: 46px; gap: 2px; }
   .bell-a { left: 8px; }
   .bell-b { right: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flake, .santa-run, .santa-bob, .mistletoe-swing, .bell-swing, .store-sign {
+  .flake, .santa-run, .santa-bob, .mistletoe-swing, .bell-swing,
+  .elf, .elf-tool, .elf-sparks, .toy {
     animation: none !important;
   }
   .santa-run { left: 12vw; }

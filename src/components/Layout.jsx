@@ -1,4 +1,5 @@
 import Avatar from './Avatar.jsx';
+import { themeVars } from '../data/profiles.js';
 import { useStore } from '../lib/store.jsx';
 
 const TABS = [
@@ -14,7 +15,7 @@ export default function Layout({ tab, setTab, children }) {
   const pendingCount = mine.filter((c) => c.status === 'pending').length;
 
   return (
-    <div className={`app theme-${profile.theme.pattern}`} style={{ '--accent': profile.theme.accent, '--accent-2': profile.theme.accent2, '--bg': profile.theme.bg }}>
+    <div className={`app texture-${profile.theme.texture}`} style={themeVars(profile)}>
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">🎄</span>

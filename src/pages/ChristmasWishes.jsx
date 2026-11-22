@@ -3,7 +3,7 @@ import Avatar from '../components/Avatar.jsx';
 import GiftCard from '../components/GiftCard.jsx';
 import ProfileNotes from '../components/ProfileNotes.jsx';
 import SortBar from '../components/SortBar.jsx';
-import { PROFILES } from '../data/profiles.js';
+import { PROFILES, themeVars } from '../data/profiles.js';
 import { sortItems, useStore } from '../lib/store.jsx';
 
 export default function ChristmasWishes() {
@@ -58,7 +58,7 @@ export default function ChristmasWishes() {
       {!who ? (
         <p className="empty">Choose a name above to peek at a list. 👀</p>
       ) : (
-        <div className="wish-view" style={{ '--accent': who.theme.accent, '--accent-2': who.theme.accent2 }}>
+        <div className={`wish-view texture-${who.theme.texture}`} style={themeVars(who)}>
           <header className="wish-header">
             <Avatar profile={who} image={meta.image} size={128} />
             <h3 className="wish-name">{who.name}</h3>

@@ -1,3 +1,5 @@
+import stockingImg from '../assets/stocking.png';
+
 const LEVELS = [
   { id: 'low', label: 'Low', count: 1 },
   { id: 'med', label: 'Medium', count: 2 },
@@ -13,11 +15,7 @@ export default function Stockings({ value = 'med', onChange, size = 'md' }) {
     <div className={`stockings ${size} ${interactive ? 'interactive' : ''}`} role={interactive ? 'radiogroup' : undefined} aria-label="Priority">
       {LEVELS.map((level, i) => {
         const on = i < lit;
-        const stocking = (
-          <span className={`stocking ${on ? 'on' : 'off'}`} aria-hidden="true">
-            🧦
-          </span>
-        );
+        const stocking = <img className={`stocking ${on ? 'on' : 'off'}`} src={stockingImg} alt="" />;
         if (!interactive) return <span key={level.id}>{stocking}</span>;
         return (
           <button

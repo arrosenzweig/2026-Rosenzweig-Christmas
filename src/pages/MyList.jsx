@@ -49,7 +49,7 @@ export default function MyList() {
         title: filled.title,
         link: filled.link,
         image: filled.image,
-        notes: draft.notes.trim(),
+        notes: [filled.note, draft.notes.trim()].filter(Boolean).join(' · '),
         priority: draft.priority,
       });
       setDraft(EMPTY);

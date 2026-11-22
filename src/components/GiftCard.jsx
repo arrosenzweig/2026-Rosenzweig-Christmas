@@ -1,6 +1,7 @@
 import Stockings from './Stockings.jsx';
 import { profileById } from '../data/profiles.js';
 import { formatLeft, msLeft } from '../lib/store.jsx';
+import { placeholderImage } from '../lib/images.js';
 
 /**
  * One gift.
@@ -31,7 +32,18 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
       )}
 
       <div className="gift-media">
-        <img src={item.image} alt="" loading="lazy" />
+        <img
+          src={item.image}
+          alt=""
+          loading="lazy"
+          onError={(e) => {
+            // a shop's photo can vanish or block hotlinking --- fall back to the
+            // wrapped-present card rather than showing a broken image
+            if (e.currentTarget.dataset.fallback) return;
+            e.currentTarget.dataset.fallback = '1';
+            e.currentTarget.src = placeholderImage(item.title);
+          }}
+        />
         {candyCane && <div className="candy-cane-watermark" aria-hidden="true" />}
         {hidden && (
           <div className="bought-cover">

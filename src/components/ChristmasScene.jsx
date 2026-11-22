@@ -1,15 +1,20 @@
+import SantaSleigh from './SantaSleigh.jsx';
+
 /**
  * The background of the "Who's shopping?" screen: red / green / gold, snow,
- * swinging bells, mistletoe in the corners, and Santa flying over a shopping
- * mall. All CSS animation --- no GIF files to load, and it all holds still for
- * anyone who has "reduce motion" switched on.
+ * swinging bells, mistletoe in the corners, Santa flying over, and a row of
+ * elves hammering away at gifts along the bottom. All CSS animation --- no GIF
+ * files to load, and it all holds still for anyone who has "reduce motion"
+ * switched on.
  */
 
-const STORES = [
-  { name: 'AMAZON', hue: '#ff9900' },
-  { name: 'WALMART', hue: '#ffc220' },
-  { name: "MACY'S", hue: '#e03131' },
-  { name: 'SHEIN', hue: '#f2f2f2' },
+// One workbench each: who's working, what they're swinging, what's on the bench.
+const ELVES = [
+  { elf: '🧝‍♀️', tool: '🔨', toys: ['🎁', '🧸'] },
+  { elf: '🧝‍♂️', tool: '🪚', toys: ['🚂'] },
+  { elf: '🧝', tool: '🔧', toys: ['🎮', '🎁'] },
+  { elf: '🧝‍♀️', tool: '🖌️', toys: ['🧸', '🪁'] },
+  { elf: '🧝‍♂️', tool: '🔨', toys: ['🏀', '🎁'] },
 ];
 
 const SNOW = Array.from({ length: 36 }, (_, i) => ({
@@ -88,34 +93,34 @@ export default function ChristmasScene() {
         ))}
       </div>
 
-      {/* Santa, reindeer and sleigh crossing the sky */}
+      {/* Santa and his eight reindeer crossing the sky */}
       <div className="santa-run">
         <div className="santa-bob">
-          <span className="santa-team">🦌</span>
-          <span className="santa-team">🦌</span>
-          <span className="santa-sleigh">🛷</span>
-          <span className="santa-man">🎅</span>
-          <span className="santa-trail" />
+          <SantaSleigh />
         </div>
       </div>
 
-      {/* The mall below */}
-      <div className="mall">
-        <div className="mall-glow" />
-        <div className="mall-row">
-          {STORES.map((s) => (
-            <div className="store" key={s.name} style={{ '--sign': s.hue }}>
-              <div className="store-awning" />
-              <div className="store-sign">{s.name}</div>
-              <div className="store-front">
-                <span className="store-window" />
-                <span className="store-door">🎄</span>
-                <span className="store-window" />
+      {/* The elves at their workbenches along the bottom */}
+      <div className="workshop">
+        <div className="workshop-glow" />
+        <div className="workshop-row">
+          {ELVES.map((e, i) => (
+            <div className="elf-station" key={i} style={{ '--n': i }}>
+              <div className="elf-wrap">
+                <span className="elf">{e.elf}</span>
+                <span className="elf-tool">{e.tool}</span>
+                <span className="elf-sparks" />
+              </div>
+              <div className="bench">
+                <div className="bench-toys">
+                  {e.toys.map((t, j) => (
+                    <span className="toy" key={j} style={{ '--t': j }}>{t}</span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="mall-ground" />
       </div>
 
       <Mistletoe side="left" />
