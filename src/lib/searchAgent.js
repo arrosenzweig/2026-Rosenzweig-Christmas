@@ -19,7 +19,7 @@
 //
 // Titles coming out of here are always Title Cased, and trailing asides
 // ("--- opal please", "(good quality)") are split off into a short
-// "Preference: ..." note rather than left in the name.
+// short note under the title rather than left in the name.
 
 import { placeholderImage } from './images.js';
 
@@ -48,7 +48,7 @@ export function titleCase(text) {
 /**
  * Pulls the aside out of a messy wish-list line.
  * "Kendra Scott earrings --- opal please" ->
- *   { title: 'Kendra Scott Earrings', note: 'Preference: Opal' }
+ *   { title: 'Kendra Scott Earrings', note: 'Opal' }
  */
 export function cleanTitle(raw) {
   let text = String(raw || '').trim();
@@ -70,7 +70,8 @@ export function cleanTitle(raw) {
 
   return {
     title: titleCase(text),
-    note: aside ? `Preference: ${titleCase(aside)}` : '',
+    // the aside stands on its own as the subtitle, with no label in front
+    note: aside ? titleCase(aside) : '',
   };
 }
 

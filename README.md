@@ -73,8 +73,8 @@ stopping as soon as the item is complete:
    wrapped-present card with the title written on it.
 
 Whatever stage answers, names come out Title Cased and trailing asides are split
-into a short note: "Kendra Scott earrings --- opal please" becomes
-**Kendra Scott Earrings** with *Preference: Opal* underneath.
+into a short note underneath: "Kendra Scott earrings --- opal please" becomes
+**Kendra Scott Earrings** with *Opal* as its subtitle.
 
 ### The catalog
 

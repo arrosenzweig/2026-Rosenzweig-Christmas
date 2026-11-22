@@ -3,7 +3,7 @@
 //
 // The rule here: the item stays whatever the person asked for. Titles are their
 // own words, tidied into Title Case, with any aside split out as a
-// "Preference: ..." note --- a brand only appears in a title when they named
+// short note of its own --- a brand only appears in a title when they named
 // one. The photo and the link are the CLOSEST MATCH the agent could verify, so
 // they may point at one particular shop's version of the thing; they are a
 // picture and a reference, not a decision about what to buy.
@@ -22,25 +22,25 @@ export const CATALOG = {
   },
   'All-Clad stainless steel 10-12 in. fry pan': {
     title: "All-Clad Stainless Fry Pan",
-    note: 'Preference: 10 To 12 Inch',
+    note: '10 To 12 Inch',
     link: 'https://www.all-clad.com/d3-stainless-3-ply-bonded-cookware-fry-pan-12-inch.html',
     image: 'https://www.all-clad.com/media/catalog/product/8/7/8701004401_hero.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=1000&width=1000&canvas=1000:1000',
   },
   'All-Clad stainless steel ~4 qt. sauté pan': {
     title: "All-Clad Stainless Saut\u00e9 Pan",
-    note: 'Preference: About 4 Quarts',
+    note: 'About 4 Quarts',
     link: 'https://www.all-clad.com/d3-stainless-3-ply-bonded-cookware-saute-pan-with-lid-4-quart.html',
     image: 'https://www.all-clad.com/media/catalog/product/8/7/8701004421_hero.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=1000&width=1000&canvas=1000:1000',
   },
   '~8 qt. stockpot': {
     title: "8 Quart Stockpot",
-    note: "Preference: Doesn't Have To Be All-Clad",
+    note: "Doesn't Have To Be All-Clad",
     link: 'https://www.amazon.com/Cuisinart-766-24-Classic-8-Quart-Stockpot/dp/B00008CM6J',
     image: 'https://m.media-amazon.com/images/I/41k0lr7vnAL._AC_SL1000_.jpg',
   },
   'Sticky rollers --- purple set with all 3': {
     title: "Get Ur Sticky Purple Roller Set",
-    note: 'Preference: Purple Set With All 3',
+    note: 'Purple Set With All 3',
     link: 'https://www.getursticky.com/products/purple-clothes-saver-set-1',
     image: 'https://cdn.shopify.com/s/files/1/1003/6169/9638/files/Screenshot2026-11-19at12.35.43AM_691efc1e-95ac-4f74-9eb8-babed01a0111.png?v=1795070506',
   },
@@ -63,7 +63,7 @@ export const CATALOG = {
   },
   'Floral long lasting perfume': {
     title: "Floral Long-Lasting Perfume",
-    note: 'Preference: Expensive, Long-Lasting Floral',
+    note: 'Expensive, Long-Lasting Floral',
     link: 'https://www.amazon.com/dp/B009S3UP3W',
     image: 'https://m.media-amazon.com/images/I/71vP8VO6fvL._AC_SL1500_.jpg',
   },
@@ -84,7 +84,7 @@ export const CATALOG = {
   },
   'Super high quality dresses': {
     title: "House Of CB Dress",
-    note: 'Preference: House Of CB, Size XS',
+    note: 'House Of CB, Size XS',
     link: 'https://app.houseofcb.com/anastasia-black-satin-corset-dress',
     image: 'https://d166chel5lrjm5.cloudfront.net/images/detailed/68/anastasia-4.jpg',
   },
@@ -100,13 +100,13 @@ export const CATALOG = {
   },
   '2 hours of individual personal time with me': {
     title: '2 Hours Of Individual Personal Time',
-    note: 'Preference: A Thoughtful You/Me Activity, Not A Chore',
+    note: 'A Thoughtful You/Me Activity, Not A Chore',
   },
 
   // ----------------------------------------------------------- Alyla ----
   "Turkish delights --- not nutty": {
     title: "Turkish Delight",
-    note: "Preference: Not Nutty",
+    note: "Not Nutty",
     link: "https://www.turkishtaste.com/products/turkish-delight-with-rose-and-lemon-flavored",
     image: "https://cdn.shopify.com/s/files/1/0259/9003/7582/products/tt-haci-bekir-lemon-rose-3.jpg?v=1605788047",
   },
@@ -127,7 +127,7 @@ export const CATALOG = {
   },
   "Kendra Scott earrings --- opal please": {
     title: "Kendra Scott Earrings",
-    note: "Preference: Opal",
+    note: "Opal",
     link: "https://www.reeds.com/kendra-scott-ellie-stud-earrings-in-white-kyocera-simulated-opal-plu19731801.html",
     image: "https://www.reeds.com/media/catalog/product/cache/497a82b708ed80bbd921bd11008f2bd1/k/e/kendra_scott_ellie_stud_earrings_in_white_kyocera_opal-1-19731801-hx5241dfd5.jpg",
   },
@@ -153,13 +153,13 @@ export const CATALOG = {
   },
   "Glow Recipe full kit": {
     title: "Glow Recipe Full Kit",
-    note: "Preference: Full Kit",
+    note: "Full Kit",
     link: "https://www.glowrecipe.com/products/the-korean-glass-skincare-vault-kit",
     image: "https://cdn.shopify.com/s/files/1/0543/8301/files/3019494-hero.jpg?v=1789486430",
   },
   "Orabella perfume full size --- Eternal Roots": {
     title: "Orebella Perfume",
-    note: "Preference: Eternal Roots, Full Size",
+    note: "Eternal Roots, Full Size",
     link: "https://orebella.com/products/eternal-roots",
     image: "https://cdn.shopify.com/s/files/1/0815/9762/8735/files/SS_EternalRoots_Group_wide_collection.jpg?v=1754516688",
   },
@@ -192,19 +192,19 @@ export const CATALOG = {
   // ------------------------------------------ Alexandria & Alysia ----
   "Earbuds": {
     title: "Earbuds",
-    note: "Preference: Under $20",
+    note: "Under $20",
     link: "https://www.target.com/p/jlab-go-air-pop-true-wireless-bluetooth-earbuds-black/-/A-83647937",
     image: "https://target.scene7.com/is/image/Target/GUEST_2aaa4389-48cf-465e-b161-dba213036573?wid=800&hei=800&fmt=pjpeg",
   },
   "Simple / minimalistic necklaces": {
     title: "Minimalist Necklace",
-    note: "Preference: Silver Or Gold Plated, Does Not Tarnish",
+    note: "Silver Or Gold Plated, Does Not Tarnish",
     link: "https://www.target.com/p/adornia-tarnish-resistant-18k-gold-plated-bar-necklace/-/A-1004003119",
     image: "https://target.scene7.com/is/image/Target/GUEST_0903db70-7e6b-4f7a-84c9-2497ab72d168?wid=800&hei=800&fmt=pjpeg",
   },
   "Long sleeve bodysuit or shirt (thermal)": {
     title: "Long Sleeve Thermal Top",
-    note: "Preference: Size XS",
+    note: "Size XS",
     link: "https://www.uniqlo.com/us/en/products/E478965-000/00",
     image: "https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/478965/item/goods_09_478965_3x4.jpg",
   },
@@ -230,7 +230,7 @@ export const CATALOG = {
   },
   "Fake French tip nails": {
     title: "Fake French Tip Nails",
-    note: "Preference: Good Quality",
+    note: "Good Quality",
     link: "https://www.target.com/p/olive-38-june-press-on-fake-nails-short-squoval-classic-french-42ct/-/A-86946132",
     image: "https://target.scene7.com/is/image/Target/GUEST_770829f0-4b50-43e9-a5a9-0a62d4bf6e5e?wid=800&hei=800&fmt=pjpeg",
   },
@@ -241,7 +241,7 @@ export const CATALOG = {
   },
   "Cheap pilates socks": {
     title: "Pilates Socks",
-    note: "Preference: Cheap, Check With Me First",
+    note: "Cheap, Check With Me First",
     link: "https://www.target.com/p/gaiam-studio-select-barre-sock-2pk/-/A-94413600",
     image: "https://target.scene7.com/is/image/Target/GUEST_5202585b-0f04-4eca-9749-1537c34d6608?wid=800&hei=800&fmt=pjpeg",
   },
@@ -254,43 +254,43 @@ export const CATALOG = {
   // --------------------------------------------------- Alyson, part 2 ----
   "The Unwind book series --- full blue set": {
     title: "The Unwind Book Series",
-    note: "Preference: Full Blue Set",
+    note: "Full Blue Set",
     link: "https://www.simonandschuster.com/books/Ultimate-Unwind-Paperback-Collection-(Boxed-Set)/Neal-Shusterman/Unwind-Dystology/9781481491815",
     image: "https://m.media-amazon.com/images/P/1481491814.01.LZZZZZZZ.jpg",
   },
   "Stylish Victorian ankle pumps": {
     title: "Victorian Ankle Boots",
-    note: "Preference: Brown",
+    note: "Brown",
     link: "https://historicalemporium.com/products/ladies-leather-victorian-boots-brown",
     image: "https://cdn.shopify.com/s/files/1/0980/0974/3654/files/007637_01_6632c204-bb29-4fc6-ab3d-006d7fc380c2.jpg?v=1769541917",
   },
   "Classy or cute skirts (L) & tops (M)": {
     title: "Classy Skirts & Tops",
-    note: "Preference: Classy Or Cute, Skirts Size L, Tops Size M",
+    note: "Classy Or Cute, Skirts Size L, Tops Size M",
     link: "https://www.jcrew.com/p/womens/categories/clothing/skirts/midi/gwyneth-lace-trim-slip-skirt-in-textured-satin/CD354",
     image: "https://www.jcrew.com/s7-img-facade/CD354_WZ7052?hei=1700&crop=0,0,1360,0",
   },
   "Brahmin bag --- Pecan Melbourne": {
     title: "Brahmin Melbourne Bag",
-    note: "Preference: Pecan Melbourne",
+    note: "Pecan Melbourne",
     link: "https://www.brahmin.com/products/tabitha-pecan-melbourne-t0415100004",
     image: "https://cdn.shopify.com/s/files/1/0669/6406/2445/files/T04-151--00004-1_464b1704-896b-4bf6-ada0-7d3cb600e327.jpg?v=1714075615",
   },
   "PolyGel": {
     title: "PolyGel",
-    note: "Preference: From Small Business bsg_usa On Instagram",
+    note: "From Small Business bsg_usa On Instagram",
     link: "https://www.sallybeauty.com/nails/acrylic-nails/polygel-hard-gel-and-builder-gel-nails/polygel-trial-kit/SBS-006720.html",
     image: "https://www.sallybeauty.com/dw/image/v2/BCSM_PRD/on/demandware.static/-/Sites-SBS-SallyBeautySupply/default/dw4e24504a/images/large/SBS-006720.jpg?sw=1000&sh=1000&sm=fit&sfrm=png",
   },
   "Custom embroidered sweater of the cats": {
     title: "Custom Embroidered Sweater Of The Cats",
-    note: "Preference: Embroidered With The Cats",
+    note: "Embroidered With The Cats",
     link: "https://www.uncommongoods.com/product/custom-pet-embroidered-sweatshirt",
     image: "https://images.uncommongoods.com/images/items/56700/56797_1_640px.jpg",
   },
   "Cute knit sweaters (L)": {
     title: "Cute Knit Sweater",
-    note: "Preference: Cute Knit, Size L",
+    note: "Cute Knit, Size L",
     link: "https://www.jcrew.com/p/womens/categories/clothing/sweaters/pullovers/cable-knit-crewneck-sweater/CN860",
     image: "https://www.jcrew.com/s7-img-facade/CN860_BL8133?hei=1700&crop=0,0,1360,0",
   },

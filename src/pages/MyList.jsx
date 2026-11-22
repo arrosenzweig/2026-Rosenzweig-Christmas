@@ -135,8 +135,14 @@ export default function MyList() {
               variant="own"
               onDelete={deleteItem}
               onPriority={(id, priority) => updateItem(id, { priority })}
-              // an edit here is yours --- it stops the catalog overwriting the gift later
-              onEdit={(id, patch) => updateItem(id, { ...patch, edited: true })}
+              // rewriting the gift makes it yours, so the catalog stops updating it ---
+              // but merely approving the photo is not a rewrite
+              onEdit={(id, patch) =>
+                updateItem(id, {
+                  ...patch,
+                  ...(['title', 'notes', 'link', 'image'].some((f) => f in patch) ? { edited: true } : {}),
+                })
+              }
             />
           ))}
         </div>
