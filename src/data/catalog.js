@@ -41,8 +41,8 @@ export const CATALOG = {
   '~8 qt. stockpot': {
     title: "8 Quart Stockpot",
     note: "Doesn't Have To Be All-Clad",
-    link: 'https://www.amazon.com/Cuisinart-766-24-Classic-8-Quart-Stockpot/dp/B00008CM6J',
-    image: "https://images.pexels.com/photos/18789103/pexels-photo-18789103.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    link: "https://www.amazon.com/Cuisinart-766-24-Classic-8-Quart-Stockpot/dp/B00008CM6J",
+    image: "https://m.media-amazon.com/images/I/41k0lr7vnAL._AC_SL1000_.jpg",
   },
   'Sticky rollers --- purple set with all 3': {
     title: "Get Ur Sticky Purple Roller Set",
@@ -52,8 +52,8 @@ export const CATALOG = {
   },
   Showerhead: {
     title: "Showerhead",
-    link: 'https://www.amazon.com/AquaCare-Pressure-Spray-Filtered-Showerhead/dp/B0FJBDGC9Z',
-    image: "https://images.pexels.com/photos/4194866/pexels-photo-4194866.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    link: "https://www.amazon.com/AquaCare-Pressure-Spray-Filtered-Showerhead/dp/B0FJBDGC9Z",
+    image: "https://m.media-amazon.com/images/I/81Voxy0TN6L._AC_SL1500_.jpg",
   },
   'Mangosteen fruit': {
     title: 'Fresh Mangosteen',
@@ -64,8 +64,8 @@ export const CATALOG = {
   // ---------------------------------------------------------- Aleena ----
   'Chargeable hand warmers': {
     title: "Rechargeable Hand Warmers",
-    link: 'https://www.amazon.com/dp/B0BG5T55F5',
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Latentw%C3%A4rmespeicher.jpg",
+    link: "https://www.amazon.com/dp/B0BG5T55F5",
+    image: "https://m.media-amazon.com/images/I/71H3b5pgQCL._AC_SL1500_.jpg",
   },
   'Floral long lasting perfume': {
     title: "Floral Long-Lasting Perfume",
@@ -75,8 +75,8 @@ export const CATALOG = {
   },
   'Portable battery': {
     title: "Portable Battery",
-    link: 'https://www.anker.com/products/a1289',
-    image: "https://images.pexels.com/photos/3921704/pexels-photo-3921704.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    link: "https://www.anker.com/products/a1289",
+    image: "https://cdn.shopify.com/s/files/1/0493/9834/9974/products/A1289011-Anker_737_Power_Bank_PowerCore_24K_1.png?v=1775967275",
   },
   'Samsung tablet': {
     title: "Samsung Tablet",
@@ -101,8 +101,8 @@ export const CATALOG = {
   },
   'Chef paring knife': {
     title: "Chef Paring Knife",
-    link: 'https://www.victorinox.com/en-US/Products/Cutlery/Paring-Knives/Swiss-Classic-Paring-Knife/p/6.7603',
-    image: "https://images.pexels.com/photos/26926847/pexels-photo-26926847.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    link: "https://www.victorinox.com/en-US/Products/Cutlery/Paring-Knives/Swiss-Classic-Paring-Knife/p/6.7603",
+    image: "https://imageengine.victorinox.com/transform/c5cabef9-1c03-4d73-aadf-694a23b0bed9/CUT_6-7603_S1",
   },
   '2 hours of individual personal time with me': {
     title: '2 Hours Of Individual Personal Time',
@@ -124,7 +124,7 @@ export const CATALOG = {
   "Gem bedazzling kit": {
     title: "Gem Bedazzling Kit",
     link: "https://www.michaels.com/product/crystal-hotfix-tool-set-by-bead-landing-10682692",
-    image: "https://images.unsplash.com/photo-1648942754609-2d5593c5e23e?auto=format&fit=crop&w=1200&q=80",
+    image: "https://imgs.michaels.com/c40f7ef5-d79c-41c5-ba2f-2291a0bd5cc9.jpg?fit=inside%7C540:540",
   },
   "Tooth gems": {
     title: "Tooth Gem Kit",
@@ -155,7 +155,7 @@ export const CATALOG = {
   "Crystal candy": {
     title: "Crystal Rock Candy",
     link: "https://www.dylanscandybar.com/products/two-tone-rock-candy-anniversary-set",
-    image: "https://images.unsplash.com/photo-1575650771982-097ad8b4a716?auto=format&fit=crop&w=1200&q=80",
+    image: "https://cdn.shopify.com/s/files/1/0150/8992/6198/files/20211215-By-Asha-Fuller-DCB-0007-Z.jpg?v=1706816016",
   },
   "Glow Recipe full kit": {
     title: "Glow Recipe Full Kit",
@@ -182,11 +182,12 @@ export const CATALOG = {
   "Teeth whitening strips": {
     title: "Teeth Whitening Strips",
     link: "https://www.hismileteeth.com/products/whitening-strips",
+    image: "https://cdn.shopify.com/s/files/1/0916/4078/files/01-Strips-ProductPage.png?v=1691535894",
   },
   "Good razors": {
     title: "Razors",
     link: "https://shopflamingo.com/products/original-razor-starter-set",
-    image: "https://images.pexels.com/photos/4404978/pexels-photo-4404978.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: "https://cdn.shopify.com/s/files/1/0558/7481/4054/files/2026_Allure_Starter_set_lilac.jpg?v=1790097165",
   },
   "Sugar cane": {
     title: "Sugar Cane",
@@ -216,7 +217,7 @@ export const CATALOG = {
   "Towel-like bathrobe": {
     title: "Towel-Like Bathrobe",
     link: "https://www.target.com/p/roxoni-womens-100-cotton-shawl-collar-robe-terry-cloth-bathrobe/-/A-1004952683",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Kylpytakki.jpg/960px-Kylpytakki.jpg",
+    image: "https://target.scene7.com/is/image/Target/GUEST_64fcdddc-1bde-48b8-99e0-59f9b7579a93?wid=800&hei=800&fmt=pjpeg",
   },
   "Athena Club razor refills": {
     title: "Athena Club Razor Refills",
@@ -226,34 +227,34 @@ export const CATALOG = {
   "Matcha advent calendar": {
     title: "Matcha Advent Calendar",
     link: "https://www.johnlewis.com/bird-blend-matcha-advent-calendar-300g/p115340647",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Matcha-powder-2356768_1280.jpg/960px-Matcha-powder-2356768_1280.jpg",
+    image: "https://media.johnlewiscontent.com/i/JohnLewis/115320857?fmt=auto&$background-off-white$&$rsp-pdp-port-640$",
   },
   "Shoulder shrug": {
     title: "Shoulder Shrug",
     link: "https://www.target.com/p/women-s-lightweight-shrug-sweater-for-dresses-tops-long-sleeve-open-front-knit-crop-bolero-cardigan/-/A-1002725592",
-    image: "https://images.pexels.com/photos/21575896/pexels-photo-21575896.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: "https://target.scene7.com/is/image/Target/GUEST_078664ba-8dd9-40d1-8a92-605ef533e8d5",
   },
   "Fake French tip nails": {
     title: "Fake French Tip Nails",
     note: "Good Quality",
     link: "https://www.target.com/p/olive-38-june-press-on-fake-nails-short-squoval-classic-french-42ct/-/A-86946132",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Frenchmanicurewiki.jpg/960px-Frenchmanicurewiki.jpg",
+    image: "https://target.scene7.com/is/image/Target/GUEST_770829f0-4b50-43e9-a5a9-0a62d4bf6e5e?wid=800&hei=800&fmt=pjpeg",
   },
   "Phone wallet": {
     title: "Phone Wallet",
     link: "https://www.target.com/p/popsockets-magnetic-phone-wallet-with-grip-and-magsafe-magnetic-adapter-ring-included/-/A-83446887",
-    image: "https://images.unsplash.com/photo-1753802865383-3d4909bfbec3?fm=jpg&q=80&w=900&auto=format&fit=crop",
+    image: "https://target.scene7.com/is/image/Target/GUEST_e7a22f58-5701-4ab6-95bc-a7c427856a0e?wid=800&hei=800&fmt=pjpeg",
   },
   "Cheap pilates socks": {
     title: "Pilates Socks",
     note: "Cheap, Check With Me First",
     link: "https://www.target.com/p/gaiam-studio-select-barre-sock-2pk/-/A-94413600",
-    image: "https://images.pexels.com/photos/33360047/pexels-photo-33360047.jpeg?auto=compress&cs=tinysrgb&w=900",
+    image: "https://target.scene7.com/is/image/Target/GUEST_5202585b-0f04-4eca-9749-1537c34d6608?wid=800&hei=800&fmt=pjpeg",
   },
   "Yoga wrap top": {
     title: "Yoga Wrap Top",
     link: "https://athleta.gap.com/browse/product.do?pid=8455740820002",
-    image: "https://images.unsplash.com/photo-1627547610879-ce5956f91721?fm=jpg&q=80&w=900&auto=format&fit=crop",
+    image: "https://athleta.gap.com/webcontent/0063/010/601/cn63010601.jpg",
   },
 
   // --------------------------------------------------- Alyson, part 2 ----
@@ -278,8 +279,8 @@ export const CATALOG = {
   "Brahmin bag --- Pecan Melbourne": {
     title: "Brahmin Melbourne Bag",
     note: "Pecan Melbourne",
-    link: "https://www.brahmin.com/products/tabitha-pecan-melbourne-t0415100004",
-    image: "https://cdn.shopify.com/s/files/1/0669/6406/2445/files/T04-151--00004-1_464b1704-896b-4bf6-ada0-7d3cb600e327.jpg?v=1714075615",
+    link: "https://brahmin.com/products/tabitha-pecan-melbourne-t0415100004",
+    image: "https://m.media-amazon.com/images/I/81qIF26M9yL._AC_SR736,920_.jpg",
   },
   "PolyGel": {
     title: "PolyGel",

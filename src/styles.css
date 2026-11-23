@@ -590,14 +590,16 @@ p.editable { margin: 0; }
 /* --- the page itself, washed in their colours ---------------------------- */
 .app.custom-look {
   background:
-    radial-gradient(62vw 58vh at 8% 4%, color-mix(in srgb, var(--accent) 52%, transparent), transparent 64%),
-    radial-gradient(58vw 54vh at 94% 12%, color-mix(in srgb, var(--accent-2) 48%, transparent), transparent 66%),
-    radial-gradient(74vw 62vh at 50% 110%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 68%),
-    radial-gradient(40vw 40vh at 70% 70%, color-mix(in srgb, var(--accent-2) 32%, transparent), transparent 70%),
-    linear-gradient(165deg,
-      color-mix(in srgb, var(--accent) 22%, #fffdf8) 0%,
-      color-mix(in srgb, var(--accent-2) 10%, #fffdf8) 46%,
-      color-mix(in srgb, var(--accent-2) 26%, #fffdf8) 100%);
+    radial-gradient(66vw 60vh at 6% 2%, color-mix(in srgb, var(--accent) 78%, transparent), transparent 62%),
+    radial-gradient(62vw 56vh at 96% 10%, color-mix(in srgb, var(--accent-2) 74%, transparent), transparent 64%),
+    radial-gradient(80vw 66vh at 50% 112%, color-mix(in srgb, var(--accent) 66%, transparent), transparent 66%),
+    radial-gradient(46vw 44vh at 72% 68%, color-mix(in srgb, var(--accent-2) 54%, transparent), transparent 68%),
+    radial-gradient(40vw 40vh at 22% 62%, color-mix(in srgb, var(--accent) 46%, transparent), transparent 70%),
+    linear-gradient(160deg,
+      color-mix(in srgb, var(--accent) 55%, #fffdf8) 0%,
+      color-mix(in srgb, var(--accent) 38%, #fffdf8) 28%,
+      color-mix(in srgb, var(--accent-2) 40%, #fffdf8) 58%,
+      color-mix(in srgb, var(--accent-2) 60%, #fffdf8) 100%);
   background-attachment: fixed;
 }
 /* a slow aurora sliding over the wash, so the colour is never quite still */
@@ -608,11 +610,11 @@ p.editable { margin: 0; }
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(40vw 40vh at 30% 40%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 60%),
-    radial-gradient(44vw 38vh at 70% 60%, color-mix(in srgb, var(--accent-2) 42%, transparent), transparent 62%),
-    radial-gradient(30vw 30vh at 50% 20%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 64%);
-  filter: blur(36px);
-  opacity: 0.9;
+    radial-gradient(44vw 44vh at 30% 40%, color-mix(in srgb, var(--accent) 70%, transparent), transparent 60%),
+    radial-gradient(48vw 42vh at 70% 60%, color-mix(in srgb, var(--accent-2) 66%, transparent), transparent 62%),
+    radial-gradient(34vw 34vh at 50% 18%, color-mix(in srgb, var(--accent) 52%, transparent), transparent 64%);
+  filter: blur(34px);
+  opacity: 1;
   animation: auroraRoll 34s ease-in-out infinite;
 }
 @keyframes auroraRoll {
@@ -631,7 +633,7 @@ p.editable { margin: 0; }
 .app.custom-look .emoji-picker,
 .app.custom-look .notes-preview,
 .app.custom-look .wish-header {
-  background-color: rgba(255, 255, 255, 0.78);
+  background-color: rgba(255, 255, 255, 0.74);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 }
@@ -664,6 +666,16 @@ p.editable { margin: 0; }
   50% { transform: translate3d(3vw, -4vh, 0) scale(1.3); opacity: 0.9; }
 }
 
+/* --- clipart, drawn in their colours ------------------------------------- */
+.backdrop-art {
+  position: absolute;
+  display: block;
+  will-change: transform;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 2px 6px rgba(43, 21, 18, 0.12));
+}
+
 /* --- the flock ----------------------------------------------------------- */
 .backdrop-item {
   position: absolute;
@@ -683,11 +695,11 @@ p.editable { margin: 0; }
 }
 
 /* five ways of moving, handed out at random */
-.backdrop-item.is-rise { animation-name: floatUp; animation-timing-function: linear; }
-.backdrop-item.is-drift { animation-name: driftSide; animation-timing-function: linear; }
-.backdrop-item.is-orbit { animation-name: orbitRound; animation-timing-function: linear; }
-.backdrop-item.is-sway { animation-name: swayAbout; }
-.backdrop-item.is-spin { animation-name: spinSlow; animation-timing-function: linear; }
+.backdrop-item.is-rise, .backdrop-art.is-rise { animation-name: floatUp; animation-timing-function: linear; }
+.backdrop-item.is-drift, .backdrop-art.is-drift { animation-name: driftSide; animation-timing-function: linear; }
+.backdrop-item.is-orbit, .backdrop-art.is-orbit { animation-name: orbitRound; animation-timing-function: linear; }
+.backdrop-item.is-sway, .backdrop-art.is-sway { animation-name: swayAbout; }
+.backdrop-item.is-spin, .backdrop-art.is-spin { animation-name: spinSlow; animation-timing-function: linear; }
 
 @keyframes floatUp {
   0% { transform: translate3d(0, 20vh, 0) rotate(0deg); opacity: 0; }
@@ -776,7 +788,7 @@ p.editable { margin: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .backdrop-item, .backdrop-orb, .backdrop-twinkle, .backdrop-flight,
+  .backdrop-item, .backdrop-art, .backdrop-orb, .backdrop-twinkle, .backdrop-flight,
   .backdrop-special, .app.custom-look::after {
     animation: none !important;
   }
@@ -1057,4 +1069,8 @@ p.editable { margin: 0; }
   .cropper-slider span { width: 70px; font-size: 11px; }
   .emoji-option { width: 38px; height: 38px; font-size: 20px; }
   .emoji-current-mark { width: 48px; height: 48px; font-size: 26px; }
+}
+
+@media (max-width: 620px) {
+  .backdrop-art { transform-origin: center; }
 }

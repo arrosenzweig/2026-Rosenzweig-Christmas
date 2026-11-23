@@ -121,6 +121,10 @@ At the foot of **My Profile** there is a short questionnaire that rebuilds
    and the whole page: a wash of those colours across the background, a slow
    aurora drifting over it, your header repainted in them, and every card turned
    to frosted glass so the scene behind keeps showing through.
+   Drawn clipart in those colours --- stars, hearts, gifts, baubles,
+   snowflakes, candy canes, gems, balloons --- drifts across the page as well,
+   which is how the colours reach every corner: emoji cannot be recoloured,
+   shapes can.
 2. **Three things for your background.** Each word becomes a whole flock, not a
    sprite: things rise like bubbles, drift across on the breeze, swing in slow
    orbits, sway and spin. They are spread over three depths --- far ones small,

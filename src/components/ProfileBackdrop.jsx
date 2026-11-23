@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import Clipart, { CLIPART_NAMES } from './Clipart.jsx';
 import { motifFor } from '../data/motifs.js';
 
 /**
@@ -35,9 +36,9 @@ const MOTIONS = ['rise', 'drift', 'orbit', 'sway', 'spin'];
 
 // far / middle / near --- the three depths of the scene
 const DEPTHS = [
-  { count: 22, size: [18, 30], opacity: 0.34, dur: [24, 42], blur: '1px' },
-  { count: 18, size: [32, 52], opacity: 0.5, dur: [15, 27], blur: '0.2px' },
-  { count: 12, size: [56, 92], opacity: 0.62, dur: [9, 18], blur: '0' },
+  { count: 14, size: [18, 30], opacity: 0.34, dur: [24, 42], blur: '1px' },
+  { count: 12, size: [32, 52], opacity: 0.5, dur: [15, 27], blur: '0.2px' },
+  { count: 8, size: [56, 92], opacity: 0.62, dur: [9, 18], blur: '0' },
 ];
 
 export default function ProfileBackdrop({ items = [], special = '' }) {
@@ -71,6 +72,28 @@ export default function ProfileBackdrop({ items = [], special = '' }) {
     return out;
   }, [things.join('|')]);
 
+  // Clipart in their colours. This is the layer that actually spreads the
+  // chosen colours across the page --- emoji cannot be recoloured, drawn
+  // shapes can, so these carry the palette everywhere.
+  const confettiArt = useMemo(() => {
+    const rand = seedFrom([...things, 'clipart']);
+    const tones = ['var(--accent)', 'var(--accent-2)', 'var(--accent)', 'var(--accent-2)', '#e3a92f'];
+    return Array.from({ length: 34 }, (_, i) => ({
+      key: `art-${i}`,
+      shape: CLIPART_NAMES[Math.floor(rand() * CLIPART_NAMES.length)],
+      tone: tones[i % tones.length],
+      left: Math.round(rand() * 97),
+      top: Math.round(rand() * 94),
+      size: Math.round(18 + rand() * 64),
+      opacity: 0.3 + rand() * 0.45,
+      motion: MOTIONS[Math.floor(rand() * MOTIONS.length)],
+      duration: Math.round(10 + rand() * 26),
+      delay: -Math.round(rand() * 26),
+      swing: Math.round(18 + rand() * 60),
+      tilt: Math.round(-30 + rand() * 60),
+    }));
+  }, [things.join('|')]);
+
   // coloured orbs that breathe behind everything
   const orbs = useMemo(
     () =>
@@ -102,6 +125,26 @@ export default function ProfileBackdrop({ items = [], special = '' }) {
                 '--tone': o.tone,
                 animationDuration: `${o.dur}s`,
                 animationDelay: `${o.delay}s`,
+              }}
+            />
+          ))}
+
+          {confettiArt.map((a) => (
+            <Clipart
+              key={a.key}
+              shape={a.shape}
+              className={`backdrop-art is-${a.motion}`}
+              style={{
+                left: `${a.left}%`,
+                top: `${a.top}%`,
+                width: `${a.size}px`,
+                height: `${a.size}px`,
+                color: a.tone,
+                opacity: a.opacity,
+                animationDuration: `${a.duration}s`,
+                animationDelay: `${a.delay}s`,
+                '--swing': `${a.swing}px`,
+                '--tilt': `${a.tilt}deg`,
               }}
             />
           ))}
