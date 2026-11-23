@@ -44,7 +44,45 @@ const MOTIFS = {
   planet: '🪐', alien: '👽', ghost: '👻', skull: '💀', money: '💰', clock: '⏰',
   key: '🗝️', candle: '🕯️', balloon: '🎈', balloons: '🎈', party: '🎉', confetti: '🎊',
   teddy: '🧸', bear: '🧸', slime: '🫧', bubbles: '🫧', glitter: '✨', disco: '🪩',
+
+  // more of the things people actually type
+  jewels: '💎', jewelry: '💎', gold: '🪙', silver: '🪙', coins: '🪙', cash: '💵',
+  dollars: '💵', bills: '💵', fireworks: '🎆', firework: '🎆', sparklers: '🎇',
+  candles: '🕯️', cupcake: '🧁', cupcakes: '🧁', macaron: '🍬', boba: '🧋',
+  bubbletea: '🧋', smoothie: '🥤', soda: '🥤', wine: '🍷', champagne: '🥂',
+  cheese: '🧀', pasta: '🍝', noodles: '🍜', taco: '🌮', burger: '🍔', fries: '🍟',
+  pancakes: '🥞', waffles: '🧇', croissant: '🥐', bagel: '🥯', pretzel: '🥨',
+  grapes: '🍇', pineapple: '🍍', mango: '🥭', banana: '🍌', apple: '🍎',
+  blueberry: '🫐', coconut: '🥥', corn: '🌽', carrot: '🥕', chili: '🌶️',
+  shells: '🐚', beach: '🏖️', palm: '🌴', island: '🏝️', volcano: '🌋',
+  desert: '🏜️', camping: '🏕️', forest: '🌲', pine: '🌲', maple: '🍁',
+  autumn: '🍂', spring: '🌷', tulip: '🌷', daisy: '🌼', lotus: '🪷',
+  hibiscus: '🌺', cherryblossom: '🌸', sakura: '🌸', clover: '🍀', luck: '🍀',
+  dance: '💃', ballet: '🩰', theatre: '🎭', movies: '🎬', popcornnight: '🍿',
+  microphone: '🎤', singing: '🎤', violin: '🎻', drums: '🥁', saxophone: '🎷',
+  trumpet: '🎺', banjo: '🪕', chess: '♟️', cards: '🃏', dice: '🎲', puzzle: '🧩',
+  lego: '🧱', robot: '🤖', science: '🔬', chemistry: '⚗️', telescope: '🔭',
+  magic: '🪄', wand: '🪄', potion: '🧪', mermaid: '🧜', fairy: '🧚', wizard: '🧙',
+  knight: '🛡️', sword: '⚔️', castle: '🏰', treasure: '💰', map: '🗺️',
+  compass: '🧭', anchor: '⚓', sailing: '⛵', boat: '⛵', train: '🚂',
+  bike: '🚲', bicycle: '🚲', skateboard: '🛹', scooter: '🛴', helicopter: '🚁',
+  ufo: '🛸', satellite: '🛰️', meteor: '☄️', comet: '☄️', galaxy: '🌌',
+  sunrise: '🌅', sunset: '🌇', city: '🏙️', paris: '🗼', travel: '🧳',
+  camera2: '📸', film: '🎞️', paintbrush: '🖌️', pencil: '✏️', notebook: '📓',
+  letters: '💌', love: '💗', kiss: '💋', ring: '💍', lipstick: '💄',
+  nailpolish: '💅', skincare: '🧴', bath: '🛁', soap: '🧼', candlelight: '🕯️',
+  cozy: '🛋️', sleep: '😴', pillow: '🛏️', blanket: '🧶', knitting: '🧶',
+  yarn: '🧶', sewing: '🪡', garden: '🌻', watering: '🪴', butterfly2: '🦋',
+  ladybug: '🐞', snail: '🐌', dragonfly2: '🪲', spider: '🕷️', bat: '🦇',
+  wolf: '🐺', deer: '🦌', squirrel: '🐿️', hedgehog: '🦔', koala: '🐨',
+  monkey: '🐵', elephant: '🐘', giraffe: '🦒', zebra: '🦓', flamingo: '🦩',
+  peacock: '🦚', parrot: '🦜', swan: '🦢', duck: '🦆', chicken: '🐔',
+  cow: '🐮', pig: '🐷', sheep: '🐑', goat: '🐐', llama: '🦙', seal: '🦭',
+  jellyfish: '🪼', crab: '🦀', lobster: '🦞', shrimp: '🦐', starfish: '⭐',
 };
+
+/** When a word is not in the list, it still becomes a picture --- never text. */
+const FALLBACKS = ['🌟', '✨', '🎉', '🎈', '💫', '🌈', '🍭', '🔮', '🫧', '🎀', '🪩', '💖'];
 
 /** The emoji for a word, if there is an obvious one. */
 export function motifFor(word) {
@@ -57,7 +95,11 @@ export function motifFor(word) {
     if (MOTIFS[k]) return MOTIFS[k];
     if (k.endsWith('s') && MOTIFS[k.slice(0, -1)]) return MOTIFS[k.slice(0, -1)];
   }
-  return null;
+  // nothing matched, so pick a bright stand-in --- the same one every time for
+  // this word, so somebody's scene stays their scene
+  let hash = 0;
+  for (const ch of key) hash = (hash * 31 + ch.charCodeAt(0)) % 100000;
+  return FALLBACKS[hash % FALLBACKS.length];
 }
 
 /** Some ideas to show under the questionnaire boxes. */

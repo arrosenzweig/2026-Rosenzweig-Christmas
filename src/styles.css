@@ -485,36 +485,36 @@ p.editable { margin: 0; }
 }
 .gift-link-open:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
 
+/* The two photo buttons sit on every gift on your own list, always visible ---
+   a control nobody can find is a control nobody has. They brighten on hover. */
 .photo-refresh,
 .photo-edit {
   position: absolute;
-  left: 50%;
-  bottom: 8px;
-  transform: translateX(-50%) translateY(6px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.16s ease, transform 0.16s ease;
-  background: rgba(255, 255, 255, 0.95);
+  right: 8px;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.92);
   border: 2px solid var(--accent);
   color: var(--accent-2);
   border-radius: 999px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(43, 21, 18, 0.2);
+  opacity: 0.88;
+  box-shadow: 0 3px 10px rgba(43, 21, 18, 0.18);
+  transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease;
 }
-.gift-card.is-editable:hover .photo-edit,
-.gift-card.is-editable:hover .photo-refresh,
-.photo-edit:focus-visible,
-.photo-refresh:focus-visible {
+.photo-edit { bottom: 8px; }
+.photo-refresh { bottom: 38px; }
+.photo-refresh:hover,
+.photo-edit:hover,
+.photo-refresh:focus-visible,
+.photo-edit:focus-visible {
   opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+  transform: scale(1.05);
+  background: #fff;
 }
-/* sits just above "Change photo" */
-.photo-refresh { bottom: 40px; }
-.photo-refresh:disabled { cursor: progress; opacity: 0.9; }
+.photo-refresh:disabled { cursor: progress; opacity: 1; background: color-mix(in srgb, var(--accent) 16%, #fff); }
 
 /* where the board is saved --- shown in the footer */
 .board-state { display: inline-flex; align-items: center; gap: 6px; }
@@ -590,13 +590,14 @@ p.editable { margin: 0; }
 /* --- the page itself, washed in their colours ---------------------------- */
 .app.custom-look {
   background:
-    radial-gradient(60vw 55vh at 10% 6%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%),
-    radial-gradient(55vw 50vh at 92% 14%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 64%),
-    radial-gradient(70vw 60vh at 50% 108%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 66%),
+    radial-gradient(62vw 58vh at 8% 4%, color-mix(in srgb, var(--accent) 52%, transparent), transparent 64%),
+    radial-gradient(58vw 54vh at 94% 12%, color-mix(in srgb, var(--accent-2) 48%, transparent), transparent 66%),
+    radial-gradient(74vw 62vh at 50% 110%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 68%),
+    radial-gradient(40vw 40vh at 70% 70%, color-mix(in srgb, var(--accent-2) 32%, transparent), transparent 70%),
     linear-gradient(165deg,
-      color-mix(in srgb, var(--accent) 9%, #fffdf8) 0%,
-      #fffdf8 48%,
-      color-mix(in srgb, var(--accent-2) 11%, #fffdf8) 100%);
+      color-mix(in srgb, var(--accent) 22%, #fffdf8) 0%,
+      color-mix(in srgb, var(--accent-2) 10%, #fffdf8) 46%,
+      color-mix(in srgb, var(--accent-2) 26%, #fffdf8) 100%);
   background-attachment: fixed;
 }
 /* a slow aurora sliding over the wash, so the colour is never quite still */
@@ -607,10 +608,11 @@ p.editable { margin: 0; }
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(40vw 40vh at 30% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    radial-gradient(44vw 38vh at 70% 60%, color-mix(in srgb, var(--accent-2) 20%, transparent), transparent 62%);
-  filter: blur(40px);
-  opacity: 0.75;
+    radial-gradient(40vw 40vh at 30% 40%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 60%),
+    radial-gradient(44vw 38vh at 70% 60%, color-mix(in srgb, var(--accent-2) 42%, transparent), transparent 62%),
+    radial-gradient(30vw 30vh at 50% 20%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 64%);
+  filter: blur(36px);
+  opacity: 0.9;
   animation: auroraRoll 34s ease-in-out infinite;
 }
 @keyframes auroraRoll {
@@ -629,7 +631,7 @@ p.editable { margin: 0; }
 .app.custom-look .emoji-picker,
 .app.custom-look .notes-preview,
 .app.custom-look .wish-header {
-  background-color: rgba(255, 255, 255, 0.82);
+  background-color: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 }
@@ -650,22 +652,23 @@ p.editable { margin: 0; }
   width: var(--orb);
   height: var(--orb);
   border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--tone) 55%, transparent), transparent 70%);
-  filter: blur(14px);
-  opacity: 0.55;
+  background: radial-gradient(circle at 34% 30%, color-mix(in srgb, var(--tone) 85%, transparent), transparent 70%);
+  filter: blur(12px);
+  opacity: 0.7;
   animation-name: orbBreathe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 @keyframes orbBreathe {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.4; }
-  50% { transform: translate3d(3vw, -4vh, 0) scale(1.25); opacity: 0.7; }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.55; }
+  50% { transform: translate3d(3vw, -4vh, 0) scale(1.3); opacity: 0.9; }
 }
 
 /* --- the flock ----------------------------------------------------------- */
 .backdrop-item {
   position: absolute;
   line-height: 1;
+  filter: saturate(1.25);
   user-select: none;
   will-change: transform;
   animation-timing-function: ease-in-out;
@@ -1028,19 +1031,9 @@ p.editable { margin: 0; }
    there all the time instead. */
 @media (hover: none) {
   /* a small tucked-away button rather than a pill across the picture */
-  .photo-edit, .photo-refresh {
-    opacity: 1;
-    pointer-events: auto;
-    left: auto;
-    right: 6px;
-    transform: none;
-    font-size: 13px;
-    padding: 3px 7px;
-    background: rgba(255, 255, 255, 0.92);
-  }
-  .photo-edit { bottom: 6px; }
-  .photo-refresh { bottom: 34px; font-size: 10px; }
   .photo-edit .photo-edit-label { display: none; }
+  .photo-edit { bottom: 6px; right: 6px; padding: 3px 7px; font-size: 13px; }
+  .photo-refresh { bottom: 32px; right: 6px; padding: 3px 7px; font-size: 10px; }
   /* a pencil is enough of a hint --- outlining every field is too noisy */
   .gift-card.is-editable .editable::after {
     content: ' ✎';

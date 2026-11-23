@@ -125,8 +125,10 @@ At the foot of **My Profile** there is a short questionnaire that rebuilds
    sprite: things rise like bubbles, drift across on the breeze, swing in slow
    orbits, sway and spin. They are spread over three depths --- far ones small,
    faint and slow; near ones big, bold and quick --- so the page has real depth.
-   Recognised words become pictures; anything else is written out in your own
-   words and drifts just the same.
+   Every word becomes a picture --- about 350 words are recognised outright, and
+   anything else gets a bright stand-in (a star, a rainbow, a disco ball),
+   picked consistently so your scene is always the same scene. No text ever
+   floats in the background.
 3. **One special something.** It sweeps across the page on a long curve,
    trailing sparks, over and over.
 

@@ -35,9 +35,9 @@ const MOTIONS = ['rise', 'drift', 'orbit', 'sway', 'spin'];
 
 // far / middle / near --- the three depths of the scene
 const DEPTHS = [
-  { count: 12, size: [16, 28], opacity: 0.28, dur: [26, 44], blur: '1.1px' },
-  { count: 10, size: [30, 48], opacity: 0.38, dur: [17, 29], blur: '0.3px' },
-  { count: 7, size: [52, 86], opacity: 0.46, dur: [11, 19], blur: '0' },
+  { count: 22, size: [18, 30], opacity: 0.34, dur: [24, 42], blur: '1px' },
+  { count: 18, size: [32, 52], opacity: 0.5, dur: [15, 27], blur: '0.2px' },
+  { count: 12, size: [56, 92], opacity: 0.62, dur: [9, 18], blur: '0' },
 ];
 
 export default function ProfileBackdrop({ items = [], special = '' }) {
@@ -107,11 +107,11 @@ export default function ProfileBackdrop({ items = [], special = '' }) {
           ))}
 
           {flock.map((f) => {
-            const emoji = motifFor(f.word);
+            const emoji = motifFor(f.word); // never null --- always a picture
             return (
               <span
                 key={f.key}
-                className={`backdrop-item is-${f.motion} ${emoji ? '' : 'is-word'}`}
+                className={`backdrop-item is-${f.motion}`}
                 style={{
                   left: `${f.left}%`,
                   top: `${f.top}%`,
@@ -124,13 +124,13 @@ export default function ProfileBackdrop({ items = [], special = '' }) {
                   '--tilt': `${f.tilt}deg`,
                 }}
               >
-                {emoji || f.word}
+                {emoji}
               </span>
             );
           })}
 
           {/* a handful of twinkles to make the whole thing shimmer */}
-          {[18, 42, 61, 79, 93, 30].map((left, i) => (
+          {[8, 18, 29, 42, 51, 61, 70, 79, 86, 93, 35, 24].map((left, i) => (
             <span
               key={`tw-${i}`}
               className="backdrop-twinkle"
@@ -146,8 +146,8 @@ export default function ProfileBackdrop({ items = [], special = '' }) {
 
       {specialText && (
         <span className="backdrop-flight">
-          <span className={`backdrop-special ${specialEmoji ? '' : 'is-word'}`}>
-            {specialEmoji || specialText}
+          <span className="backdrop-special">
+            {specialEmoji}
             <span className="backdrop-trail" />
           </span>
         </span>
