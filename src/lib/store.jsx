@@ -62,7 +62,7 @@ function buildSeed() {
       claims[id] = { by: 'family', status: 'bought', at: SEED_EPOCH + i * 60000 };
     }
   });
-  return { version: 1, items, claims, profiles };
+  return { version: 1, items, claims, profiles, shares: {} };
 }
 
 /**
@@ -116,6 +116,47 @@ export function expireClaims(claims, now = Date.now()) {
   return changed ? next : claims;
 }
 
+/**
+ * The same five day rule, for gifts several people are allowed to buy.
+ * `shares` is {itemId: {person: claim}} and sits alongside `claims` rather than
+ * replacing it, so boards written before this feature existed still work.
+ */
+export function expireShares(shares, now = Date.now()) {
+  let changed = false;
+  const next = {};
+  for (const [itemId, byPerson] of Object.entries(shares || {})) {
+    const kept = {};
+    for (const [person, claim] of Object.entries(byPerson || {})) {
+      if (claim.status === 'pending' && now - claim.at > PENDING_MS) {
+        changed = true;
+        continue;
+      }
+      kept[person] = claim;
+    }
+    if (Object.keys(kept).length) next[itemId] = kept;
+    else if (Object.keys(byPerson || {}).length) changed = true;
+  }
+  return changed ? next : shares;
+}
+
+/** Everybody who has claimed this gift, however it was claimed. */
+export function claimsOn(itemId, claims, shares) {
+  const out = [];
+  const single = claims?.[itemId];
+  if (single) out.push(single);
+  for (const claim of Object.values(shares?.[itemId] || {})) {
+    if (!single || claim.by !== single.by) out.push(claim);
+  }
+  return out;
+}
+
+/** Your own claim on a gift, whether it is a shared one or not. */
+export function myClaimOn(itemId, me, claims, shares) {
+  const single = claims?.[itemId];
+  if (single && single.by === me) return single;
+  return shares?.[itemId]?.[me] || null;
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(DATA_KEY);
@@ -127,6 +168,7 @@ function load() {
       items: parsed.items,
       claims: expireClaims(parsed.claims || {}),
       profiles: parsed.profiles || {},
+      shares: expireShares(parsed.shares || {}),
     };
   } catch {
     return buildSeed();
@@ -150,7 +192,12 @@ export function StoreProvider({ children }) {
 
   // what we last knew the board to be --- used when the server has nothing yet
   const boardRef = useRef(null);
-  boardRef.current = { items: state.items, claims: state.claims, profiles: state.profiles || {} };
+  boardRef.current = {
+    items: state.items,
+    claims: state.claims,
+    profiles: state.profiles || {},
+    shares: state.shares || {},
+  };
 
   useEffect(() => persist(state), [state]);
 
@@ -161,7 +208,13 @@ export function StoreProvider({ children }) {
 
   const adopt = useCallback((board) => {
     const { items, changed } = refreshSeedItems(board.items);
-    setState({ version: 1, items, claims: expireClaims(board.claims), profiles: board.profiles || {} });
+    setState({
+      version: 1,
+      items,
+      claims: expireClaims(board.claims),
+      profiles: board.profiles || {},
+      shares: expireShares(board.shares || {}),
+    });
     // a nicer photo or a cleaner name has shipped --- share it with everyone
     if (changed.length) {
       mutateBoard((b) => ({
@@ -220,6 +273,7 @@ export function StoreProvider({ children }) {
           items: refreshSeedItems(board.items).items,
           claims: expireClaims(board.claims),
           profiles: board.profiles || {},
+          shares: expireShares(board.shares || {}),
         };
         return JSON.stringify(next) === JSON.stringify(s) ? s : next;
       });
@@ -233,9 +287,13 @@ export function StoreProvider({ children }) {
     const t = setInterval(() => {
       setState((s) => {
         const claims = expireClaims(s.claims);
-        if (claims === s.claims) return s;
-        mutateBoard((b) => ({ ...b, claims: expireClaims(b.claims) }), boardRef.current).catch(() => {});
-        return { ...s, claims };
+        const shares = expireShares(s.shares || {});
+        if (claims === s.claims && shares === (s.shares || {})) return s;
+        mutateBoard(
+          (b) => ({ ...b, claims: expireClaims(b.claims), shares: expireShares(b.shares || {}) }),
+          boardRef.current,
+        ).catch(() => {});
+        return { ...s, claims, shares };
       });
     }, 60000);
     return () => clearInterval(t);
@@ -258,30 +316,62 @@ export function StoreProvider({ children }) {
     push((b) => {
       const claims = { ...b.claims };
       delete claims[id];
-      return { ...b, items: b.items.filter((it) => it.id !== id), claims };
+      const shares = { ...(b.shares || {}) };
+      delete shares[id];
+      return { ...b, items: b.items.filter((it) => it.id !== id), claims, shares };
     });
     setState((s) => {
       const claims = { ...s.claims };
       delete claims[id];
-      return { ...s, items: s.items.filter((it) => it.id !== id), claims };
+      const shares = { ...(s.shares || {}) };
+      delete shares[id];
+      return { ...s, items: s.items.filter((it) => it.id !== id), claims, shares };
     });
   }, [push]);
 
-  /** status: 'pending' | 'bought' | null (null clears your claim). */
-  const setClaim = useCallback((itemId, status, by) => {
+  /**
+   * status: 'pending' | 'bought' | null (null clears your claim).
+   *
+   * On a gift whose owner ticked "several people can buy this", everybody's
+   * claim is kept separately under `shares`, so one person saying they are
+   * buying it never stops anybody else. Ordinary gifts keep working exactly as
+   * before, through `claims`.
+   */
+  const setClaim = useCallback((itemId, status, by, shared = false) => {
     const claim = status ? { by, status, at: Date.now() } : null;
-    setState((s) => {
-      const claims = { ...s.claims };
-      if (!claim) delete claims[itemId];
-      else claims[itemId] = claim;
-      return { ...s, claims };
-    });
-    push((b) => {
-      const claims = { ...b.claims };
-      if (!claim) delete claims[itemId];
-      else claims[itemId] = claim;
-      return { ...b, claims };
-    });
+
+    if (!shared) {
+      setState((s) => {
+        const claims = { ...s.claims };
+        if (!claim) delete claims[itemId];
+        else claims[itemId] = claim;
+        return { ...s, claims };
+      });
+      push((b) => {
+        const claims = { ...b.claims };
+        if (!claim) delete claims[itemId];
+        else claims[itemId] = claim;
+        return { ...b, claims };
+      });
+      return;
+    }
+
+    const apply = (board) => {
+      const shares = { ...(board.shares || {}) };
+      const mine = { ...(shares[itemId] || {}) };
+      if (!claim) delete mine[by];
+      else mine[by] = claim;
+      if (Object.keys(mine).length) shares[itemId] = mine;
+      else delete shares[itemId];
+
+      // if this person's claim was the old single one, let that go too
+      const claims = { ...board.claims };
+      if (!claim && claims[itemId]?.by === by) delete claims[itemId];
+      return { ...board, claims, shares };
+    };
+
+    setState((s) => apply(s));
+    push(apply);
   }, [push]);
 
   // ------------------------------------------------ profile image & notes --
@@ -334,17 +424,24 @@ export function StoreProvider({ children }) {
   /** Wave away the "this gift changed" warning on one gift. */
   const acknowledgeChange = useCallback((itemId) => {
     const ackAt = Date.now();
-    setState((s) => {
-      const claim = s.claims[itemId];
-      if (!claim) return s;
-      return { ...s, claims: { ...s.claims, [itemId]: { ...claim, ackAt } } };
-    });
-    push((b) => {
-      const claim = b.claims[itemId];
-      if (!claim) return b;
-      return { ...b, claims: { ...b.claims, [itemId]: { ...claim, ackAt } } };
-    });
-  }, [push]);
+    const me = profileId;
+    const apply = (board) => {
+      const next = { ...board };
+      if (board.claims?.[itemId]?.by === me) {
+        next.claims = { ...board.claims, [itemId]: { ...board.claims[itemId], ackAt } };
+      }
+      const mine = board.shares?.[itemId]?.[me];
+      if (mine) {
+        next.shares = {
+          ...(board.shares || {}),
+          [itemId]: { ...board.shares[itemId], [me]: { ...mine, ackAt } },
+        };
+      }
+      return next;
+    };
+    setState((s) => apply(s));
+    push(apply);
+  }, [push, profileId]);
 
   const resetEverything = useCallback(() => setState(buildSeed()), []);
 
@@ -352,6 +449,7 @@ export function StoreProvider({ children }) {
     () => ({
       items: state.items,
       claims: state.claims,
+      shares: state.shares || {},
       profiles: state.profiles || {},
       profileMeta: (id) => (state.profiles || {})[id] || { image: '', notes: [] },
       profileId,

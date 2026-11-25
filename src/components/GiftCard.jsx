@@ -13,11 +13,25 @@ import { findPhoto } from '../lib/searchAgent.js';
  *   variant "browse" --- someone else's list: claim buttons, candy-cane /
  *                        wrapped-gift covers depending on who claimed it.
  */
-export default function GiftCard({ item, variant = 'own', claim, me, onDelete, onPriority, onEdit, onClaim }) {
+export default function GiftCard({
+  item,
+  variant = 'own',
+  claim,
+  otherBuyers = 0,
+  me,
+  onDelete,
+  onPriority,
+  onEdit,
+  onShared,
+  onClaim,
+}) {
   const mine = claim && claim.by === me;
   const buyer = claim ? profileById(claim.by) : null;
-  const hidden = variant === 'browse' && claim?.status === 'bought' && !mine;
-  const candyCane = variant === 'browse' && claim?.status === 'pending';
+  // the owner said several people may buy this one
+  const shared = Boolean(item.multi);
+  // a shared gift is never covered up or candy-caned: everyone may still buy it
+  const hidden = variant === 'browse' && !shared && claim?.status === 'bought' && !mine;
+  const candyCane = variant === 'browse' && !shared && claim?.status === 'pending';
   const editable = variant === 'own' && typeof onEdit === 'function';
   // older items predate the credit, so work it out from the photo itself: an
   // uploaded photo is a data: URL, anything else was found for us
@@ -138,6 +152,17 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
           </label>
         )}
 
+        {editable && (
+          <label className={`multi-toggle ${item.multi ? 'is-on' : ''}`}>
+            <input
+              type="checkbox"
+              checked={Boolean(item.multi)}
+              onChange={(e) => onShared(item.id, e.target.checked)}
+            />
+            {item.multi ? 'Several people can buy this' : 'Only one person should buy this'}
+          </label>
+        )}
+
         {hidden && <span className="gift-title muted">A secret 🤫</span>}
 
         {!hidden && editable && (
@@ -193,12 +218,18 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
 
         {variant === 'browse' && (
           <div className="claim-row">
+            {shared && (
+              <span className="shared-note" title="The owner said several people can buy this">
+                👐 Several can buy{otherBuyers > 0 ? ` — ${otherBuyers} already ${otherBuyers === 1 ? 'is' : 'are'}` : ''}
+              </span>
+            )}
+
             {!claim && (
               <>
-                <button className="btn pending" type="button" onClick={() => onClaim(item.id, 'pending')}>
+                <button className="btn pending" type="button" onClick={() => onClaim(item.id, 'pending', shared)}>
                   🍬 Pending purchase
                 </button>
-                <button className="btn bought" type="button" onClick={() => onClaim(item.id, 'bought')}>
+                <button className="btn bought" type="button" onClick={() => onClaim(item.id, 'bought', shared)}>
                   ✅ Bought
                 </button>
               </>
@@ -209,10 +240,10 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
                 <span className="claim-note">
                   You have this on hold — <strong>{formatLeft(msLeft(claim))}</strong> left
                 </span>
-                <button className="btn bought" type="button" onClick={() => onClaim(item.id, 'bought')}>
+                <button className="btn bought" type="button" onClick={() => onClaim(item.id, 'bought', shared)}>
                   ✅ I bought it
                 </button>
-                <button className="btn ghost" type="button" onClick={() => onClaim(item.id, null)}>
+                <button className="btn ghost" type="button" onClick={() => onClaim(item.id, null, shared)}>
                   Release
                 </button>
               </>
@@ -221,7 +252,7 @@ export default function GiftCard({ item, variant = 'own', claim, me, onDelete, o
             {claim && mine && claim.status === 'bought' && (
               <>
                 <span className="claim-note">You bought this 🎁</span>
-                <button className="btn ghost" type="button" onClick={() => onClaim(item.id, null)}>
+                <button className="btn ghost" type="button" onClick={() => onClaim(item.id, null, shared)}>
                   Undo
                 </button>
               </>

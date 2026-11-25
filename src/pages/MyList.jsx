@@ -137,6 +137,8 @@ export default function MyList() {
               onPriority={(id, priority) => updateItem(id, { priority })}
               // rewriting the gift makes it yours, so the catalog stops updating it ---
               // but merely approving the photo is not a rewrite
+              // saying several people may buy a gift is not a rewrite of it
+              onShared={(id, multi) => updateItem(id, { multi })}
               onEdit={(id, patch) => {
                 const content = ['title', 'notes', 'link', 'image'].filter((f) => f in patch);
                 updateItem(id, {

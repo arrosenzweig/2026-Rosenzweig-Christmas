@@ -58,6 +58,18 @@ item you can mark:
 
 An item can sit in pending and move to bought later.
 
+**Gifts several people can buy.** Some things --- socks, candles, slime --- are
+fine to get more than one of. On your own list each gift has a checkbox:
+*Only one person should buy this* / *Several people can buy this*. Tick it and
+that gift stops locking: nobody's claim blurs it or candy-canes it for anyone
+else, everyone keeps their own **Pending purchase** and **Bought** buttons, and
+the card quietly says how many others are already buying it. Everybody's claim
+is tracked separately, so each person sees only their own in Santa's Workshop,
+with their own five-day countdown.
+
+Ordinary gifts are untouched by this: one claim, locked for everyone else,
+exactly as before.
+
 **Santa's Workshop.** Your own shopping board: everything you have on hold and
 everything you've bought, kept apart. Pending gifts show how much time is left
 before the hold lapses, and turn red in the last day.

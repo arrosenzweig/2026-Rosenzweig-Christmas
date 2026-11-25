@@ -5,10 +5,10 @@ import ProfileNotes from '../components/ProfileNotes.jsx';
 import SortBar from '../components/SortBar.jsx';
 import { PROFILES, themeVarsFor } from '../data/profiles.js';
 import ChangeWarning from '../components/ChangeWarning.jsx';
-import { changedSinceClaim, sortItems, useStore } from '../lib/store.jsx';
+import { changedSinceClaim, claimsOn, myClaimOn, sortItems, useStore } from '../lib/store.jsx';
 
 export default function ChristmasWishes() {
-  const { items, claims, profileId, setClaim, profileMeta, acknowledgeChange } = useStore();
+  const { items, claims, shares, profileId, setClaim, profileMeta, acknowledgeChange } = useStore();
   const others = PROFILES.filter((p) => p.id !== profileId);
   const [selected, setSelected] = useState(null);
   const [sort, setSort] = useState('priority');
@@ -19,16 +19,16 @@ export default function ChristmasWishes() {
   const { giving, rest } = useMemo(() => {
     if (!who) return { giving: [], rest: [] };
     const theirs = items.filter((i) => i.owner === who.id);
-    const isMine = (i) => claims[i.id]?.by === profileId;
+    const isMine = (i) => Boolean(myClaimOn(i.id, profileId, claims, shares));
     return {
       giving: sortItems(theirs.filter(isMine), sort),
       rest: sortItems(theirs.filter((i) => !isMine(i)), sort),
     };
-  }, [who, items, claims, profileId, sort]);
+  }, [who, items, claims, shares, profileId, sort]);
 
   // gifts of theirs you are buying that they have since changed
   const changedEntries = giving
-    .filter((item) => changedSinceClaim(item, claims[item.id]))
+    .filter((item) => changedSinceClaim(item, myClaimOn(item.id, profileId, claims, shares)))
     .map((item) => ({ item, fields: item.lastEditedFields || [] }));
 
   const card = (item) => (
@@ -37,8 +37,9 @@ export default function ChristmasWishes() {
       item={item}
       variant="browse"
       me={profileId}
-      claim={claims[item.id]}
-      onClaim={(id, status) => setClaim(id, status, profileId)}
+      claim={item.multi ? myClaimOn(item.id, profileId, claims, shares) : claims[item.id]}
+      otherBuyers={claimsOn(item.id, claims, shares).filter((c) => c.by !== profileId).length}
+      onClaim={(id, status, shared) => setClaim(id, status, profileId, shared)}
     />
   );
 

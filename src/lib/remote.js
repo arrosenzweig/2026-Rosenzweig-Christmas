@@ -32,7 +32,7 @@ const FB_URL = FB ? `${FB}/${import.meta.env.VITE_ROOM || 'christmas-2026'}/boar
 export const isShared = () => true;
 export const boardKind = () => (FB ? 'firebase' : 'textdb');
 
-const EMPTY = { items: [], claims: {}, profiles: {} };
+const EMPTY = { items: [], claims: {}, profiles: {}, shares: {} };
 
 function tidy(board) {
   if (!board || typeof board !== 'object') return null;
@@ -40,6 +40,9 @@ function tidy(board) {
     items: Array.isArray(board.items) ? board.items : Object.values(board.items || {}),
     claims: board.claims || {},
     profiles: board.profiles || {},
+    // extra buyers on gifts whose owner said several people may buy one.
+    // A board written before this existed simply has none.
+    shares: board.shares || {},
   };
 }
 

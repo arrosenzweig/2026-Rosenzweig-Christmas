@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import ChangeWarning from '../components/ChangeWarning.jsx';
 import { profileById } from '../data/profiles.js';
-import { changedSinceClaim, formatLeft, msLeft, PENDING_DAYS, useStore } from '../lib/store.jsx';
+import { changedSinceClaim, formatLeft, msLeft, myClaimOn, PENDING_DAYS, useStore } from '../lib/store.jsx';
 
 function Row({ item, claim, onClaim, changed, ownerEmoji }) {
   const owner = profileById(item.owner);
@@ -42,21 +42,26 @@ function Row({ item, claim, onClaim, changed, ownerEmoji }) {
 }
 
 export default function SantasWorkshop() {
-  const { items, claims, profileId, setClaim, acknowledgeChange, profileMeta } = useStore();
+  const { items, claims, shares, profileId, setClaim, acknowledgeChange, profileMeta } = useStore();
 
   const { pending, bought } = useMemo(() => {
     const byId = Object.fromEntries(items.map((i) => [i.id, i]));
-    const mine = Object.entries(claims)
-      .filter(([, c]) => c.by === profileId)
-      .map(([id, claim]) => ({ item: byId[id], claim }))
-      .filter((r) => r.item);
+    // everything you are buying, whether the gift is yours alone to buy or one
+    // the owner said several people could buy
+    const mine = items
+      .map((item) => ({ item, claim: myClaimOn(item.id, profileId, claims, shares) }))
+      .filter((r) => r.claim)
+      .map((r) => ({ item: byId[r.item.id], claim: r.claim }));
     return {
       pending: mine.filter((r) => r.claim.status === 'pending').sort((a, b) => a.claim.at - b.claim.at),
       bought: mine.filter((r) => r.claim.status === 'bought').sort((a, b) => b.claim.at - a.claim.at),
     };
-  }, [items, claims, profileId]);
+  }, [items, claims, shares, profileId]);
 
-  const claim = (id, status) => setClaim(id, status, profileId);
+  const claim = (id, status) => {
+    const item = items.find((i) => i.id === id);
+    setClaim(id, status, profileId, Boolean(item?.multi));
+  };
 
   // gifts the owner has changed since you took them on
   const changedEntries = [...pending, ...bought]
