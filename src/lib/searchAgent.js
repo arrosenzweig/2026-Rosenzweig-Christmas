@@ -183,21 +183,73 @@ export async function enrich(draft, accent) {
 
 // --------------------------------------------------------- finding photos --
 //
-// "Refresh AI photo" on a card sends the elf out to look for a different
-// picture of whatever the gift is called. Two open libraries answer without a
-// key and allow being called from a browser:
+// "Refresh AI photo" sends the elf to look for a picture of whatever the gift
+// is called. There are two ways it can do that, and they are not equal.
 //
-//   Openverse          --- Creative Commons photos from Flickr and friends,
-//                          which is where everyday objects actually live
-//   Wikimedia Commons  --- the fallback, more encyclopedic than catalogue
+// 1. GOOGLE IMAGES (what you want, and what this prefers)
+//    Google's Programmable Search JSON API searches Google's own image index
+//    over the whole web --- the same pictures you would get by typing the gift
+//    name into Google Images. It needs two free values, and nothing else:
 //
-// Both are searched by the gift's own name, so a gift nobody put a brand on
-// gets a plain photo of the thing --- the brand rule holds by construction.
-// Each press moves further down the results, so pressing again gives you a
-// different picture rather than the same one.
+//      a) an API key    console.cloud.google.com -> APIs & Services ->
+//                       Library -> "Custom Search API" -> Enable -> Credentials
+//                       -> Create credentials -> API key
+//      b) a search id   programmablesearchengine.google.com -> Add ->
+//                       tick "Search the entire web" -> create -> copy the
+//                       "Search engine ID", then in its settings turn
+//                       "Image search" ON
+//
+//    Paste them below as GOOGLE_KEY and GOOGLE_CX (or set VITE_GOOGLE_KEY and
+//    VITE_GOOGLE_CX at build time) and every Refresh press is a real Google
+//    Images search. The free allowance is 100 searches a day across the family,
+//    which is plenty for a wish list. Restrict the key to this site's address
+//    in the Google console: the key ships in the page, as browser keys must.
+//
+// 2. OPENVERSE / WIKIMEDIA (the no-key fallback, and the reason photos have
+//    been poor)
+//    These are Creative Commons libraries, not a picture of everything. They
+//    hold somebody's 2009 snapshot of "thermal shirt" rather than the product
+//    you asked for. This is used only while there is no Google key, and the
+//    card says so.
+
+const GOOGLE_KEY = '';
+const GOOGLE_CX = '';
+
+const KEY = import.meta.env.VITE_GOOGLE_KEY || GOOGLE_KEY;
+const CX = import.meta.env.VITE_GOOGLE_CX || GOOGLE_CX;
+
+export const usingGoogle = () => Boolean(KEY && CX);
 
 const OPENVERSE = 'https://api.openverse.org/v1/images/';
 const COMMONS = 'https://commons.wikimedia.org/w/api.php';
+
+/** Google Images, through the official Programmable Search API. */
+async function fromGoogle(title, attempt) {
+  const params = new URLSearchParams({
+    key: KEY,
+    cx: CX,
+    q: title,
+    searchType: 'image',
+    num: '1',
+    safe: 'active',
+    imgSize: 'large',
+    // each press walks one result further down the page of results
+    start: String((attempt % 60) + 1),
+  });
+  const res = await fetch(`https://www.googleapis.com/customsearch/v1?${params}`);
+  if (!res.ok) {
+    const why = res.status === 429 ? 'the daily free allowance is used up' : `status ${res.status}`;
+    throw new Error(`Google image search failed: ${why}`);
+  }
+  const body = await res.json();
+  const hit = body.items?.[0];
+  if (!hit?.link) return null;
+  return {
+    image: hit.link,
+    link: hit.image?.contextLink || hit.link,
+    from: 'Google Images',
+  };
+}
 
 async function fromOpenverse(title, attempt) {
   const perPage = 4;
@@ -212,18 +264,14 @@ async function fromOpenverse(title, attempt) {
   // has to generate one first, which can take several seconds
   const direct = hit.url || '';
   const image = /\.(jpe?g|png|webp|gif)(\?|$)/i.test(direct) ? direct : hit.thumbnail || direct;
-  return {
-    image,
-    link: hit.foreign_landing_url || direct,
-    from: 'Openverse',
-  };
+  return { image, link: hit.foreign_landing_url || direct, from: 'Openverse' };
 }
 
 async function fromCommons(title, attempt) {
   const params = new URLSearchParams({
     action: 'query',
     generator: 'search',
-    gsrnamespace: '6', // files only
+    gsrnamespace: '6',
     gsrsearch: `filetype:bitmap ${title}`,
     gsrlimit: '1',
     gsroffset: String(attempt),
@@ -247,14 +295,26 @@ async function fromCommons(title, attempt) {
 }
 
 /**
- * Go and find another photo of this gift.
- * @param {string} title  what the gift is called
- * @param {number} attempt  0 for the first look, 1 for the next, and so on
+ * Go and find another photo of this gift, searching on its name.
+ *
+ * With Google set up this is a straight Google Images search for the gift's
+ * title. Without it, the Creative Commons libraries are all there is, and the
+ * result says which was used so the card can be honest about it.
+ *
  * @returns {Promise<{image, link, from}|null>}
  */
 export async function findPhoto(title, attempt = 0) {
   const name = String(title || '').trim();
   if (!name) return null;
+
+  if (usingGoogle()) {
+    try {
+      const found = await fromGoogle(name, attempt);
+      if (found?.image) return found;
+    } catch (err) {
+      console.warn(err.message);
+    }
+  }
 
   for (const look of [fromOpenverse, fromCommons]) {
     try {

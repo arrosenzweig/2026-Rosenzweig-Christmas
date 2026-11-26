@@ -4,7 +4,7 @@ import Stockings from './Stockings.jsx';
 import { profileById } from '../data/profiles.js';
 import { formatLeft, msLeft } from '../lib/store.jsx';
 import { fileToResizedDataUrl, placeholderImage } from '../lib/images.js';
-import { findPhoto } from '../lib/searchAgent.js';
+import { findPhoto, usingGoogle } from '../lib/searchAgent.js';
 
 /**
  * One gift.
@@ -51,7 +51,7 @@ export default function GiftCard({
       attempt.current += 1;
       const found = await findPhoto(item.title, attempt.current);
       if (found) {
-        onEdit(item.id, { image: found.image, imageBy: 'agent', imageApproved: false });
+        onEdit(item.id, { image: found.image, imageBy: 'agent', imageApproved: false, imageFrom: found.from });
         setFinding('');
       } else {
         setFinding('none');
@@ -111,7 +111,11 @@ export default function GiftCard({
               type="button"
               onClick={refreshPhoto}
               disabled={finding === 'looking'}
-              title="Have the elf look online for another photo of this gift"
+              title={
+                usingGoogle()
+                  ? `Search Google Images for "${item.title}"`
+                  : `Search for another photo of "${item.title}" (Creative Commons libraries --- add a Google key for Google Images)`
+              }
             >
               {finding === 'looking' && '🔎 Looking…'}
               {finding === 'none' && '🤷 Nothing found'}
@@ -159,7 +163,7 @@ export default function GiftCard({
               checked={Boolean(item.multi)}
               onChange={(e) => onShared(item.id, e.target.checked)}
             />
-            {item.multi ? 'Several people can buy this' : 'Only one person should buy this'}
+            Several people can buy this
           </label>
         )}
 
