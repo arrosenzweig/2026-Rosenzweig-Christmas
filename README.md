@@ -94,18 +94,32 @@ into a short note underneath: "Kendra Scott earrings --- opal please" becomes
 
 ### Refresh AI photo
 
-Every gift on your own list has a **Refresh AI photo** button above **Change
-photo**. Pressing it sends the elf out there and then to look for another
-picture of whatever the gift is called, through two open libraries that need no
-account and answer straight from the browser: **Openverse** (Creative Commons
-photos, where everyday objects actually live) and **Wikimedia Commons** as a
-fallback. Press it again and you get a different one --- each press works
-further down the results.
+Every gift on your own list has a **Refresh AI photo** button. Pressing it
+searches for another picture of whatever the gift is called and swaps it in.
+Press again for a different one --- each press walks further down the results.
 
-Because the search uses the gift's own name, a gift nobody put a brand on gets a
-plain photo of the thing: the brand rule holds by construction. These are real
-photographs off the internet, so quality varies --- press again, or upload your
-own, which replaces it and takes the AI label off.
+**Point it at Google Images.** Out of the box it can only search Creative
+Commons libraries (Openverse, Wikimedia), which hold somebody's old snapshot of
+"thermal shirt" rather than the product anyone asked for. That is why the
+pictures are weak. Google's own image index is one API away and answers browser
+requests from this site; it needs two free values:
+
+1. **An API key** --- [console.cloud.google.com](https://console.cloud.google.com)
+   -> APIs & Services -> Library -> **Custom Search API** -> Enable ->
+   Credentials -> Create credentials -> API key.
+2. **A search engine id** ---
+   [programmablesearchengine.google.com](https://programmablesearchengine.google.com)
+   -> Add -> tick **Search the entire web** -> create -> copy the **Search
+   engine ID**, then in its settings switch **Image search** ON.
+
+Paste both at the top of [`src/lib/searchAgent.js`](src/lib/searchAgent.js) as
+`GOOGLE_KEY` and `GOOGLE_CX` (or set `VITE_GOOGLE_KEY` / `VITE_GOOGLE_CX` at
+build time) and every press becomes a real Google Images search for the gift's
+title. The free allowance is 100 searches a day for the whole family.
+
+The key ships inside the page, as browser keys must, so restrict it to this
+site's address under **API restrictions** in the Google console.
+
 
 ### The brand rule
 
